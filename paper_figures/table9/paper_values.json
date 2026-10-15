@@ -1,0 +1,21 @@
+{
+  "_note": "Numbers as printed in Table 9 of sage.pdf (Marketing, first 5 attributes, theta = 0.1). Utility/Ins/Int are % of BruteForce.",
+  "approaches": ["BruteForce", "No PR/PX", "No PR", "No PX", "SAGE"],
+  "n_pts": {"BruteForce": 130, "No PR/PX": 130, "No PR": 130, "No PX": 20, "SAGE": 20},
+  "blocks": {
+    "2": {
+      "combinations": {"BruteForce": "8,385", "No PR/PX": "N/A", "No PR": "N/A", "No PX": "N/A", "SAGE": "N/A"},
+      "runtime":      {"BruteForce": 5817, "No PR/PX": 4971, "No PR": 76, "No PX": 492, "SAGE": 23},
+      "utility":      {"BruteForce": 100, "No PR/PX": 100, "No PR": 97, "No PX": 100, "SAGE": 97},
+      "ins":          {"BruteForce": 100, "No PR/PX": 100, "No PR": 94, "No PX": 100, "SAGE": 94},
+      "int":          {"BruteForce": 100, "No PR/PX": 100, "No PR": 100, "No PX": 100, "SAGE": 100}
+    },
+    "5": {
+      "combinations": {"BruteForce": "286M", "No PR/PX": "N/A", "No PR": "N/A", "No PX": "N/A", "SAGE": "N/A"},
+      "runtime":      {"BruteForce": 19604, "No PR/PX": 4971, "No PR": 76, "No PX": 492, "SAGE": 24},
+      "utility":      {"BruteForce": 100, "No PR/PX": 100, "No PR": 97, "No PX": 100, "SAGE": 97},
+      "ins":          {"BruteForce": 100, "No PR/PX": 100, "No PR": 92, "No PX": 100, "SAGE": 92},
+      "int":          {"BruteForce": 100, "No PR/PX": 100, "No PR": 100, "No PX": 100, "SAGE": 100}
+    }
+  }
+}

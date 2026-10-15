@@ -1,0 +1,16 @@
+# Task Description: {instruction} Return the result as JSON in the following format:{"ranked_aggregation_functions": ["<aggregation function 1>", "<aggregation function 2>", ...]}. Please return only the JSON output. 
+
+## Input: 
+**Column:** 
+{table}
+        
+**Candidate aggregation function:** 
+MEAN
+SUM
+COUNT
+MIN
+MAX
+        
+Return the result as JSON in the following format: {"ranked_aggregation_functions": ["<aggregation function 1>", "<aggregation function 2>", ...]}.
+        
+## Output:

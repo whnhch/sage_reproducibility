@@ -1,0 +1,198 @@
+{
+  "ID": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Year_Birth": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Education": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Marital_Status": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Income": [
+    "MEAN",
+    "SUM",
+    "MAX",
+    "MIN",
+    "COUNT"
+  ],
+  "Kidhome": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Teenhome": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Dt_Customer": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Recency": [
+    "MAX",
+    "MIN",
+    "COUNT",
+    "SUM",
+    "MEAN"
+  ],
+  "MntWines": [
+    "MAX",
+    "MIN",
+    "SUM",
+    "COUNT",
+    "MEAN"
+  ],
+  "MntFruits": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "MntMeatProducts": [
+    "MAX",
+    "MIN",
+    "SUM",
+    "COUNT",
+    "MEAN"
+  ],
+  "MntFishProducts": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "MntSweetProducts": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "MntGoldProds": [
+    "MEAN",
+    "SUM",
+    "MAX",
+    "MIN",
+    "COUNT"
+  ],
+  "NumDealsPurchases": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "NumWebPurchases": [
+    "COUNT",
+    "SUM",
+    "MEAN",
+    "MAX",
+    "MIN"
+  ],
+  "NumCatalogPurchases": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "NumStorePurchases": [
+    "COUNT",
+    "SUM",
+    "MEAN",
+    "MIN",
+    "MAX"
+  ],
+  "NumWebVisitsMonth": [
+    "MEAN",
+    "SUM",
+    "COUNT",
+    "MAX",
+    "MIN"
+  ],
+  "AcceptedCmp3": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "AcceptedCmp4": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "AcceptedCmp5": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "AcceptedCmp1": [
+    "MEAN",
+    "SUM",
+    "MIN",
+    "MAX",
+    "COUNT"
+  ],
+  "AcceptedCmp2": [
+    "MEAN",
+    "SUM",
+    "COUNT",
+    "MIN",
+    "MAX"
+  ],
+  "Response": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Complain": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Country": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ]
+}

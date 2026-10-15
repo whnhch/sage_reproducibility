@@ -1,0 +1,11 @@
+index,column,value,aggfunc
+Platform,Year,NA_Sales,median
+Genre,Year,NA_Sales,mean
+Genre,Year,Global_Sales,sum
+Genre,Year,EU_Sales,std
+Publisher,Year,NA_Sales,max
+Genre,Platform,EU_Sales,count
+Genre,Publisher,Global_Sales,sum
+Genre,Rank,EU_Sales,max
+Platform,Year,NA_Sales,count
+Platform,Rank,Global_Sales,min

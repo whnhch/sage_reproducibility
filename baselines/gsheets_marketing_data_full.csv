@@ -1,0 +1,3 @@
+﻿index,column,value,aggfunc
+Country,[],"NumDealsPurchases, NumCatalogPurchases, NumStorePurchases",SUM
+Country,[],ID,COUNT

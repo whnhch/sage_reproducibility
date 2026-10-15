@@ -1,0 +1,11 @@
+index,column,value,aggfunc
+Recency,[],MntMeatProducts,min
+Teenhome,[],NumWebPurchases,mean
+Complain,[],NumStorePurchases,sum
+Education,[],NumDealsPurchases,max
+Year_Birth,[],Income,mean
+Country,[],MntWines,count
+NumWebVisitsMonth,[],Income,median
+AcceptedCmp1,[],Income,std
+Marital_Status,[],Income,sum
+MntFruits,[],Recency,count

@@ -1,0 +1,10 @@
+index,column,value,aggfunc
+ID,NumDealsPurchases,Dt_Customer,count
+Country,[],Teenhome,sum
+Education,ID,MntFruits,sum
+ID,Income,Dt_Customer,count
+Education,[],NumDealsPurchases,sum
+Education,[],Kidhome,sum
+ID,Teenhome,Year_Birth,count
+Education,[],Teenhome,sum
+Education,[],ID,count

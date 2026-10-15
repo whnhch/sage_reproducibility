@@ -1,0 +1,79 @@
+{
+  "Rank": [
+    "MAX",
+    "MIN",
+    "SUM",
+    "MEAN",
+    "COUNT"
+  ],
+  "Name": [
+    "COUNT",
+    "SUM",
+    "MAX",
+    "MIN",
+    "MEAN"
+  ],
+  "Platform": [
+    "COUNT",
+    "MIN",
+    "MAX",
+    "SUM",
+    "MEAN"
+  ],
+  "Year": [
+    "COUNT",
+    "MEAN",
+    "SUM",
+    "MIN",
+    "MAX"
+  ],
+  "Genre": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Publisher": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "NA_Sales": [
+    "MEAN",
+    "SUM",
+    "MAX",
+    "MIN",
+    "COUNT"
+  ],
+  "EU_Sales": [
+    "MEAN",
+    "SUM",
+    "MAX",
+    "MIN",
+    "COUNT"
+  ],
+  "JP_Sales": [
+    "MAX",
+    "MIN",
+    "COUNT",
+    "SUM",
+    "MEAN"
+  ],
+  "Other_Sales": [
+    "MEAN",
+    "SUM",
+    "COUNT",
+    "MIN",
+    "MAX"
+  ],
+  "Global_Sales": [
+    "MEAN",
+    "SUM",
+    "MAX",
+    "MIN",
+    "COUNT"
+  ]
+}

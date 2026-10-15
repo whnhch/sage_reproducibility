@@ -1,0 +1,19 @@
+[
+  "Education",
+  "Income",
+  "NumWebPurchases",
+  "NumCatalogPurchases",
+  "NumStorePurchases",
+  "NumWebVisitsMonth",
+  "AcceptedCmp1",
+  "AcceptedCmp2",
+  "AcceptedCmp3",
+  "AcceptedCmp4",
+  "AcceptedCmp5",
+  "Country",
+  "Response",
+  "Year_Birth",
+  "Marital_Status",
+  "NumDealsPurchases",
+  "Complain"
+]

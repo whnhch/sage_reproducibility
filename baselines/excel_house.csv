@@ -1,0 +1,8 @@
+﻿index,column,value,aggfunc
+MSZoning,[],LotArea,sum
+Alley,[],YearBuilt,sum
+LotShape,[],"BsmtFinSF1, BsmtFinSF2, BsmtUnfSF",sum
+LandContour,[],"BsmtFinSF2, BsmtUnfSF, TotalBsmtSF",sum
+LotConfig,[],"BsmtUnfSF, TotalBsmtSF, 1stFlrSF",sum
+LandSlope,[],"TotalBsmtSF, 1stFlrSF, 2ndFlrSF",sum
+Neighborhood,[],"1stFlrSF, 2ndFlrSF, GrLivArea",sum

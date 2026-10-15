@@ -1,0 +1,9 @@
+# Task Description:: {instruction} Only return the result in the following JSON format: {"chosen_columns": "<a list of names for interesting column to be analyzed>"}.
+    
+## Input: 
+**Table:** 
+    {table}
+
+Only return the result in the following JSON format: {"chosen_columns": "<a list of names for interesting column to be analyzed>"}.
+
+## Output:

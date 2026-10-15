@@ -1,0 +1,17 @@
+{
+  "_note": "Bar labels printed in Fig. 11 of sage.pdf (runtime in s, k=5, theta=0.10, mean of 3 runs). Checked against a 600 dpi render of page 21.",
+  "x": [20, 40, 60, 80, 100],
+  "series": ["SAGE (Marketing)", "SAGE+ (Marketing)", "SAGE (CoverType)", "SAGE+ (CoverType)"],
+  "tuples": {
+    "SAGE (Marketing)":  [153, 165, 164, 168, 162],
+    "SAGE+ (Marketing)": [18, 19, 18, 19, 19],
+    "SAGE (CoverType)":  [113, 205, 307, 396, 491],
+    "SAGE+ (CoverType)": [18, 21, 29, 30, 39]
+  },
+  "attributes": {
+    "SAGE (Marketing)":  [8, 8, 15, 36, 161],
+    "SAGE+ (Marketing)": [12, 13, 12, 13, 19],
+    "SAGE (CoverType)":  [30, 248, 483, 460, 489],
+    "SAGE+ (CoverType)": [12, 24, 35, 39, 40]
+  }
+}

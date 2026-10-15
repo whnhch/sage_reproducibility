@@ -1,0 +1,13 @@
+# Python 3.10.
+joblib==1.5.1
+matplotlib==3.9.4
+numba==0.61.2
+numpy==2.2.6
+pandas==2.3.0
+scikit_learn==1.6.1
+scipy==1.13.1
+torch==2.6.0
+tqdm==4.67.1
+transformers==4.52.4
+sentencepiece==0.2.0
+huggingface_hub>=0.30,<1.0

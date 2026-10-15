@@ -1,0 +1,11 @@
+index,column,value,aggfunc
+MSSubClass,OverallQual,SalePrice,sum
+MSSubClass,YearBuilt,SalePrice,mean
+BsmtUnfSF,MSSubClass,SalePrice,count
+LotFrontage,MSSubClass,SalePrice,min
+MSSubClass,YearBuilt,SalePrice,count
+MSSubClass,TotalBsmtSF,SalePrice,max
+GrLivArea,MSSubClass,SalePrice,mean
+BsmtFinSF1,MSSubClass,SalePrice,sum
+MSSubClass,OverallQual,SalePrice,mean
+BsmtFinSF1,MSSubClass,SalePrice,max

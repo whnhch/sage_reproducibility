@@ -1,0 +1,13 @@
+# Task Description: {instruction} Choose the appropriate likelihood from following scale. Return the result as JSON in the following format: {"likelihood": "<one likelihood from the scale>"}. Please return only the JSON output. Do not include explanations, code, or the full table.
+
+## Input: 
+**Likelihood Scale:** 
+Very Likely
+Likely
+Neutral
+Unlikely
+Very Unlikely
+        
+Return the result as JSON in the following format: {"likelihood": "<one likelihood from the scale>"}.
+        
+## Output:

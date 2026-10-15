@@ -1,0 +1,4 @@
+index,column,value,aggfunc
+Marital_Status,Country,Income,mean
+Education,[],NumDealsPurchases,count
+Country,Marital_Status,MntWines,sum

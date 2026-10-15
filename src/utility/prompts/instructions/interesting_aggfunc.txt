@@ -1,0 +1,1 @@
+Given an input column of data and a list of candidate aggregation functions, rank the aggregation functions based on their suitability for summarizing the given column. Return only the ranked list of aggregation functions (from most to least suitable), using only functions from the candidate list. Do not return the entire table or any explanation only the ranked list.

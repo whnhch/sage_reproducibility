@@ -1,0 +1,772 @@
+{
+  "Elevation_1": [
+    "MIN",
+    "MAX",
+    "COUNT",
+    "SUM",
+    "MEAN"
+  ],
+  "Aspect_1": [
+    "MEAN",
+    "SUM",
+    "COUNT",
+    "MAX",
+    "MIN"
+  ],
+  "Slope_1": [
+    "MAX",
+    "MIN",
+    "SUM",
+    "COUNT",
+    "MEAN"
+  ],
+  "Horizontal_Distance_To_Hydrology_1": [
+    "MIN",
+    "MAX",
+    "COUNT",
+    "SUM",
+    "MEAN"
+  ],
+  "Vertical_Distance_To_Hydrology_1": [
+    "MAX",
+    "MIN",
+    "SUM",
+    "COUNT",
+    "MEAN"
+  ],
+  "Horizontal_Distance_To_Roadways_1": [
+    "MIN",
+    "MAX",
+    "SUM",
+    "COUNT",
+    "MEAN"
+  ],
+  "Hillshade_9am_1": [
+    "MAX",
+    "MIN",
+    "SUM",
+    "COUNT",
+    "MEAN"
+  ],
+  "Hillshade_Noon_1": [
+    "MAX",
+    "MIN",
+    "COUNT",
+    "MEAN",
+    "SUM"
+  ],
+  "Hillshade_3pm_1": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Horizontal_Distance_To_Fire_Points_1": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Wilderness_Area1_1": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Wilderness_Area2_1": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Wilderness_Area3_1": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Wilderness_Area4_1": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type1_1": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type2_1": [
+    "MEAN",
+    "SUM",
+    "COUNT",
+    "MAX",
+    "MIN"
+  ],
+  "Soil_Type3_1": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type4_1": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type5_1": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type6_1": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type7_1": [
+    "MEAN",
+    "SUM",
+    "COUNT",
+    "MIN",
+    "MAX"
+  ],
+  "Soil_Type8_1": [
+    "MEAN",
+    "SUM",
+    "COUNT",
+    "MIN",
+    "MAX"
+  ],
+  "Soil_Type9_1": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type10_1": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type11_1": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type12_1": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type13_1": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type14_1": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type15_1": [
+    "MEAN",
+    "SUM",
+    "COUNT",
+    "MIN",
+    "MAX"
+  ],
+  "Soil_Type16_1": [
+    "COUNT",
+    "SUM",
+    "MEAN",
+    "MIN",
+    "MAX"
+  ],
+  "Soil_Type17_1": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type18_1": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type19_1": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type20_1": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type21_1": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type22_1": [
+    "MEAN",
+    "MAX",
+    "MIN",
+    "SUM",
+    "COUNT"
+  ],
+  "Soil_Type23_1": [
+    "MEAN",
+    "SUM",
+    "COUNT",
+    "MIN",
+    "MAX"
+  ],
+  "Soil_Type24_1": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type25_1": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type26_1": [
+    "COUNT",
+    "SUM",
+    "MEAN",
+    "MIN",
+    "MAX"
+  ],
+  "Soil_Type27_1": [
+    "MEAN",
+    "SUM",
+    "COUNT",
+    "MIN",
+    "MAX"
+  ],
+  "Soil_Type28_1": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type29_1": [
+    "MEAN",
+    "SUM",
+    "COUNT",
+    "MIN",
+    "MAX"
+  ],
+  "Soil_Type30_1": [
+    "COUNT",
+    "SUM",
+    "MAX",
+    "MIN",
+    "MEAN"
+  ],
+  "Soil_Type31_1": [
+    "MEAN",
+    "SUM",
+    "COUNT",
+    "MIN",
+    "MAX"
+  ],
+  "Soil_Type32_1": [
+    "COUNT",
+    "SUM",
+    "MEAN",
+    "MIN",
+    "MAX"
+  ],
+  "Soil_Type33_1": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type34_1": [
+    "MEAN",
+    "SUM",
+    "COUNT",
+    "MIN",
+    "MAX"
+  ],
+  "Soil_Type35_1": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type36_1": [
+    "COUNT",
+    "SUM",
+    "MEAN",
+    "MIN",
+    "MAX"
+  ],
+  "Soil_Type37_1": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type38_1": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type39_1": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type40_1": [
+    "MEAN",
+    "SUM",
+    "COUNT",
+    "MIN",
+    "MAX"
+  ],
+  "Cover_Type_1": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Elevation_2": [
+    "MAX",
+    "MIN",
+    "COUNT",
+    "SUM",
+    "MEAN"
+  ],
+  "Aspect_2": [
+    "MEAN",
+    "SUM",
+    "COUNT",
+    "MAX",
+    "MIN"
+  ],
+  "Slope_2": [
+    "MEAN",
+    "SUM",
+    "MAX",
+    "MIN",
+    "COUNT"
+  ],
+  "Horizontal_Distance_To_Hydrology_2": [
+    "MIN",
+    "MAX",
+    "SUM",
+    "COUNT",
+    "MEAN"
+  ],
+  "Vertical_Distance_To_Hydrology_2": [
+    "MAX",
+    "MIN",
+    "SUM",
+    "COUNT",
+    "MEAN"
+  ],
+  "Horizontal_Distance_To_Roadways_2": [
+    "MIN",
+    "MAX",
+    "COUNT",
+    "SUM",
+    "MEAN"
+  ],
+  "Hillshade_9am_2": [
+    "MAX",
+    "MIN",
+    "SUM",
+    "COUNT",
+    "MEAN"
+  ],
+  "Hillshade_Noon_2": [
+    "MAX",
+    "MIN",
+    "COUNT",
+    "SUM",
+    "MEAN"
+  ],
+  "Hillshade_3pm_2": [
+    "COUNT",
+    "SUM",
+    "MAX",
+    "MIN",
+    "MEAN"
+  ],
+  "Horizontal_Distance_To_Fire_Points_2": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Wilderness_Area1_2": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Wilderness_Area2_2": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Wilderness_Area3_2": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Wilderness_Area4_2": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type1_2": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type2_2": [
+    "COUNT",
+    "SUM",
+    "MEAN",
+    "MIN",
+    "MAX"
+  ],
+  "Soil_Type3_2": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type4_2": [
+    "COUNT",
+    "SUM",
+    "MEAN",
+    "MIN",
+    "MAX"
+  ],
+  "Soil_Type5_2": [
+    "COUNT",
+    "SUM",
+    "MEAN",
+    "MIN",
+    "MAX"
+  ],
+  "Soil_Type6_2": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type7_2": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type8_2": [
+    "COUNT",
+    "SUM",
+    "MEAN",
+    "MIN",
+    "MAX"
+  ],
+  "Soil_Type9_2": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type10_2": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type11_2": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type12_2": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type13_2": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type14_2": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type15_2": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type16_2": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type17_2": [
+    "MEAN",
+    "SUM",
+    "COUNT",
+    "MIN",
+    "MAX"
+  ],
+  "Soil_Type18_2": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type19_2": [
+    "MEAN",
+    "SUM",
+    "COUNT",
+    "MIN",
+    "MAX"
+  ],
+  "Soil_Type20_2": [
+    "MEAN",
+    "SUM",
+    "COUNT",
+    "MIN",
+    "MAX"
+  ],
+  "Soil_Type21_2": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type22_2": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type23_2": [
+    "MEAN",
+    "SUM",
+    "COUNT",
+    "MIN",
+    "MAX"
+  ],
+  "Soil_Type24_2": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type25_2": [
+    "MEAN",
+    "SUM",
+    "COUNT",
+    "MIN",
+    "MAX"
+  ],
+  "Soil_Type26_2": [
+    "MEAN",
+    "SUM",
+    "COUNT",
+    "MIN",
+    "MAX"
+  ],
+  "Soil_Type27_2": [
+    "MEAN",
+    "SUM",
+    "COUNT",
+    "MIN",
+    "MAX"
+  ],
+  "Soil_Type28_2": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type29_2": [
+    "COUNT",
+    "SUM",
+    "MEAN",
+    "MIN",
+    "MAX"
+  ],
+  "Soil_Type30_2": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type31_2": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type32_2": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type33_2": [
+    "MEAN",
+    "SUM",
+    "COUNT",
+    "MIN",
+    "MAX"
+  ],
+  "Soil_Type34_2": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type35_2": [
+    "MEAN",
+    "SUM",
+    "MIN",
+    "MAX",
+    "COUNT"
+  ],
+  "Soil_Type36_2": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type37_2": [
+    "MEAN",
+    "SUM",
+    "COUNT",
+    "MIN",
+    "MAX"
+  ],
+  "Soil_Type38_2": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type39_2": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Soil_Type40_2": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Cover_Type_2": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ]
+}

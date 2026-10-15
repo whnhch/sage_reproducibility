@@ -1,0 +1,1 @@
+{groupA} and {groupB} across {column_attributes} have a {sign} correlation of {magnitude}. Based on this, how likely is it that this correlation is desirable?

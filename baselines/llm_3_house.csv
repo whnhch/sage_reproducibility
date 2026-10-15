@@ -1,0 +1,4 @@
+index,column,value,aggfunc
+BsmtFinSF1,LandSlope,SalePrice,max
+MSSubClass,YearBuilt,SalePrice,mean
+MSSubClass,YearBuilt,SalePrice,sum

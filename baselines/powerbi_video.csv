@@ -1,0 +1,4 @@
+index,column,value,aggfunc
+Genre,[],JP_Sales,sum
+Global_Sales,NA_Sales,Name,count
+Publisher,[],JP_Sales,sum

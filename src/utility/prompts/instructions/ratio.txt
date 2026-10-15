@@ -1,0 +1,1 @@
+{groupA} and {groupB} across {column_attributes} on {aggfunc} {value_attribute} have a minimum ratio of {magnitude}. Based on this, how likely is it that this ratio is desirable?

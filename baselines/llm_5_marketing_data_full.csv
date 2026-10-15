@@ -1,0 +1,6 @@
+index,column,value,aggfunc
+Education,Marital_Status,Income,mean
+Country,[],NumWebPurchases,sum
+Year_Birth,Marital_Status,MntWines,max
+Complain,AcceptedCmp1,NumStorePurchases,count
+Response,Kidhome,Income,min

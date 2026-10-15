@@ -1,0 +1,10 @@
+# conda env create -f ARI/env/environment.yml [-p /path/envs/sage]
+# Python 3.10 + requirements.txt.
+name: sage
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+      - -r requirements.txt

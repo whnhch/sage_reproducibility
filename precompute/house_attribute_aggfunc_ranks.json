@@ -1,0 +1,569 @@
+{
+  "Id": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "MSSubClass": [
+    "MEAN",
+    "SUM",
+    "COUNT",
+    "MIN",
+    "MAX"
+  ],
+  "MSZoning": [
+    "COUNT",
+    "MIN",
+    "MAX",
+    "SUM",
+    "MEAN"
+  ],
+  "LotFrontage": [
+    "MAX",
+    "MIN",
+    "SUM",
+    "COUNT",
+    "MEAN"
+  ],
+  "LotArea": [
+    "MAX",
+    "MIN",
+    "SUM",
+    "COUNT",
+    "MEAN"
+  ],
+  "Street": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Alley": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "LotShape": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "LandContour": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Utilities": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "LotConfig": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "LandSlope": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Neighborhood": [
+    "COUNT",
+    "MIN",
+    "MAX",
+    "SUM",
+    "MEAN"
+  ],
+  "Condition1": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Condition2": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "BldgType": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "HouseStyle": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "OverallQual": [
+    "MEAN",
+    "SUM",
+    "MAX",
+    "MIN",
+    "COUNT"
+  ],
+  "OverallCond": [
+    "MEAN",
+    "SUM",
+    "COUNT",
+    "MAX",
+    "MIN"
+  ],
+  "YearBuilt": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "YearRemodAdd": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "RoofStyle": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "RoofMatl": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Exterior1st": [
+    "COUNT",
+    "MIN",
+    "MAX",
+    "SUM",
+    "MEAN"
+  ],
+  "Exterior2nd": [
+    "COUNT",
+    "SUM",
+    "MAX",
+    "MIN",
+    "MEAN"
+  ],
+  "MasVnrType": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "MasVnrArea": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "ExterQual": [
+    "COUNT",
+    "MIN",
+    "MAX",
+    "SUM",
+    "MEAN"
+  ],
+  "ExterCond": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Foundation": [
+    "COUNT",
+    "SUM",
+    "MAX",
+    "MIN",
+    "MEAN"
+  ],
+  "BsmtQual": [
+    "COUNT",
+    "MAX",
+    "MIN",
+    "SUM",
+    "MEAN"
+  ],
+  "BsmtCond": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "BsmtExposure": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "BsmtFinType1": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "BsmtFinSF1": [
+    "MEAN",
+    "SUM",
+    "MAX",
+    "MIN",
+    "COUNT"
+  ],
+  "BsmtFinType2": [
+    "COUNT",
+    "MIN",
+    "MAX",
+    "SUM",
+    "MEAN"
+  ],
+  "BsmtFinSF2": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "BsmtUnfSF": [
+    "MAX",
+    "MIN",
+    "SUM",
+    "COUNT",
+    "MEAN"
+  ],
+  "TotalBsmtSF": [
+    "MAX",
+    "MIN",
+    "SUM",
+    "COUNT",
+    "MEAN"
+  ],
+  "Heating": [
+    "COUNT",
+    "SUM",
+    "MAX",
+    "MIN",
+    "MEAN"
+  ],
+  "HeatingQC": [
+    "COUNT",
+    "MIN",
+    "MAX",
+    "SUM",
+    "MEAN"
+  ],
+  "CentralAir": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Electrical": [
+    "COUNT",
+    "MAX",
+    "MIN",
+    "SUM",
+    "MEAN"
+  ],
+  "1stFlrSF": [
+    "MEAN",
+    "SUM",
+    "MIN",
+    "MAX",
+    "COUNT"
+  ],
+  "2ndFlrSF": [
+    "COUNT",
+    "SUM",
+    "MAX",
+    "MIN",
+    "MEAN"
+  ],
+  "LowQualFinSF": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "GrLivArea": [
+    "MAX",
+    "MIN",
+    "SUM",
+    "COUNT",
+    "MEAN"
+  ],
+  "BsmtFullBath": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "BsmtHalfBath": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "FullBath": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "HalfBath": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "BedroomAbvGr": [
+    "COUNT",
+    "SUM",
+    "MAX",
+    "MIN",
+    "MEAN"
+  ],
+  "KitchenAbvGr": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "KitchenQual": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "TotRmsAbvGrd": [
+    "MEAN",
+    "SUM",
+    "MIN",
+    "MAX",
+    "COUNT"
+  ],
+  "Functional": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Fireplaces": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "FireplaceQu": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "GarageType": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "GarageYrBlt": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "GarageFinish": [
+    "COUNT",
+    "MIN",
+    "MAX",
+    "SUM",
+    "MEAN"
+  ],
+  "GarageCars": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "GarageArea": [
+    "COUNT",
+    "SUM",
+    "MAX",
+    "MIN",
+    "MEAN"
+  ],
+  "GarageQual": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "GarageCond": [
+    "COUNT",
+    "MAX",
+    "MIN",
+    "SUM",
+    "MEAN"
+  ],
+  "PavedDrive": [
+    "COUNT",
+    "MIN",
+    "MAX",
+    "SUM",
+    "MEAN"
+  ],
+  "WoodDeckSF": [
+    "MAX",
+    "MIN",
+    "COUNT",
+    "SUM",
+    "MEAN"
+  ],
+  "OpenPorchSF": [
+    "MIN",
+    "MAX",
+    "COUNT",
+    "SUM",
+    "MEAN"
+  ],
+  "EnclosedPorch": [
+    "COUNT",
+    "SUM",
+    "MAX",
+    "MIN",
+    "MEAN"
+  ],
+  "3SsnPorch": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "ScreenPorch": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "PoolArea": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "PoolQC": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "Fence": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "MiscFeature": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "MiscVal": [
+    "MEAN",
+    "SUM",
+    "COUNT",
+    "MIN",
+    "MAX"
+  ],
+  "MoSold": [
+    "MEAN",
+    "SUM",
+    "MAX",
+    "MIN",
+    "COUNT"
+  ],
+  "YrSold": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "SaleType": [
+    "COUNT",
+    "SUM",
+    "MAX",
+    "MIN",
+    "MEAN"
+  ],
+  "SaleCondition": [
+    "COUNT",
+    "SUM",
+    "MIN",
+    "MAX",
+    "MEAN"
+  ],
+  "SalePrice": [
+    "MEAN",
+    "SUM",
+    "MAX",
+    "MIN",
+    "COUNT"
+  ]
+}

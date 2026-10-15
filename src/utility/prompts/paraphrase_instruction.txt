@@ -1,0 +1,2 @@
+Paraphrase the following sentence while preserving the original meaning, tone, and grammatical structure. Return the final result as JSON in the format as {"paraphrased_sentence": "result of paraphrasing"}.: 
+{instruction}

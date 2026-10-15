@@ -1,0 +1,1 @@
+Identify attributes from the dataset that are likely to be useful for grouping or aggregating the data in meaningful ways. Please suggest relevant attributes based on their semantics, uniqueness, or potential to reveal patterns.

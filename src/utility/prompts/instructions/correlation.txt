@@ -1,0 +1,1 @@
+There is a {sign} correlation of {magnitude} between {groupA} and {groupB} across {column_attributes}, based on the {aggfunc} of {value_attribute}. How likely is it that this correlation is meaningful?

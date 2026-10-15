@@ -1,0 +1,10 @@
+﻿index,column,value,aggfunc
+Platform,[],NA_Sales,sum
+Genre,[],EU_Sales,sum
+Genre,[],"JP_Sales,Other_Sales,Global_Sales",sum
+Platform,[],"Other_Sales,Global_Sales,EU_Sales",sum
+Platform,[],"Global_Sales,EU_Sales,NA_Sales",sum
+Genre,[],NA_Sales,sum
+Genre,[],"Global_Sales,Other_Sales,JP_Sales",sum
+Year,[],"EU_Sales,NA_Sales,Rank",sum
+Year,[],NA_Sales,sum

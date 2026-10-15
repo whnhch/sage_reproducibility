@@ -1,0 +1,8 @@
+﻿index,column,value,aggfunc
+Country,[],Income,sum
+Country,[],MntWines,sum
+Country,[],"MntFishProducts, MntSweetProducts, MntGoldProds",sum
+Education,[],"MntFruits, MntMeatProducts, MntFishProducts",sum
+Marital_Status,[],"MntMeatProducts, MntFishProducts, MntSweetProducts",sum
+Marital_Status,[],"MntWines, Income, Year_Birth",sum
+Country,Teenhome,Year_Birth,sum
