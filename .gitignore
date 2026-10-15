@@ -26,3 +26,4 @@ data/covertype_expanded.csv
 gpu_granite*.sh
 remove_later_*.sh
 README_files/
+readme_files/

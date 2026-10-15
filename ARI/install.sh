@@ -1,5 +1,5 @@
 #!/bin/bash
-# Step 1: install SAGE in a conda environment, download the large data files and check that it works
+# Step 1: install SAGE in a conda environment, unpack the compressed data and check that it works
 # (no GPU, no token needed).
 # Needs conda. Always builds a new environment SAGE_ENV=<name or path> (default: sage), replacing an old one.
 #   bash ARI/install.sh [--llama] [--no-smoke]
@@ -26,8 +26,8 @@ conda remove "${WHERE[@]}" --all -y >/dev/null 2>&1   # always start from a fres
 conda env create "${WHERE[@]}" -f "$ARI_DIR/env/environment.yml" || exit 1
 activate
 
-stage "data too large for GitHub (Zenodo)"
-python "$ARI_DIR/scripts/fetch_data.py" || exit 1
+stage "data"
+python "$ARI_DIR/scripts/unpack_data.py" || exit 1
 
 stage "models -> $TRANSFORMER_PATH"
 python "$ARI_DIR/scripts/fetch_models.py" ${LLAMA[@]+"${LLAMA[@]}"} || exit 1

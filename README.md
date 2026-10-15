@@ -2,7 +2,7 @@
 
 **Paper.** Whanhee Cho and Anna Fariha. *Data-Semantics-Aware Recommendation of Diverse Pivot Tables.* Proc. ACM Manag. Data 4(1) (SIGMOD), Article 23, February 2026. https://doi.org/10.1145/3786637
 
-**Code.** https://github.com/whnhch/sage_reproducibility
+**Code.** https://github.com/whnhch/sage
 
 This package installs SAGE, reruns the experiments of Section 6, and regenerates every table and figure next to the published version. Run all commands from the repository root.
 
@@ -11,8 +11,8 @@ This package installs SAGE, reruns the experiments of Section 6, and regenerates
 ## 1. Quick start
 
 ```bash
-git clone https://github.com/whnhch/sage_reproducibility.git && cd sage_reproducibility
-bash ARI/install.sh            # environment, large data files, models, checks, smoke test
+git clone https://github.com/whnhch/sage.git && cd sage
+bash ARI/install.sh            # environment, data, models, checks, smoke test
 bash ARI/run_experiments.sh    # Tables 8-9, Figs. 10-11 and the report
 bash ARI/run_optional.sh --bf  # optional, GPU: BruteForce (also --llama, --gpu; Section 7)
 ```
@@ -27,7 +27,7 @@ The result is `ARI/out/reproduced_results.pdf`: each reproduced table and figure
 |---|---|---|---|
 | Table 8, §6.3 | SAGE, SAGE+, Top-k vs. DAISY, LLM, Excel, PowerBI, Google Sheets | `paper_figures/table8/` | no |
 | Table 9, §6.4 | Pruning (PR) and LLM-proxy (PX) ablation vs. BruteForce | `paper_figures/table9/` | for BruteForce, no-proxy variants |
-| Fig. 10, §6.4, §6.6 | Optimization runtimes; utility vs. $\theta$ | `paper_figures/fig10/` | for BruteForce, no-proxy variants |
+| Fig. 10, §6.4, §6.6 | Optimization runtimes; utility vs. θ | `paper_figures/fig10/` | for BruteForce, no-proxy variants |
 | Fig. 11, §6.5 | Runtime vs. #tuples and #attributes | `paper_figures/fig11/` | no |
 | §6.7 case studies | Recommended pivot tables | `selected_queries.json` of the Table 8 runs | no |
 
@@ -38,12 +38,9 @@ The result is `ARI/out/reproduced_results.pdf`: each reproduced table and figure
 **Paper's machine:** Ubuntu 22.04, 12 CPU cores, 256 GB RAM, NVIDIA H100 (96 GB), CUDA 12.8.
 
 **Default experiments:** Linux, 64 GB RAM, 12 CPU cores (SAGE+ uses 12 worker processes), about 10 GB of disk. No GPU: the model outputs the runs need are shipped:
-
-- Llama's attribute significance and aggregate ranking: `precompute/*.json`
-
-- trend and surprise likelihoods: the LLM-proxy decision trees in `src/prompt_learning/model/`
-
-- T5 / TAPEX embeddings of every candidate: `precompute/embeddings/`.
+* Llama's attribute significance and aggregate ranking: `precompute/*.json`;
+* trend and surprise likelihoods: the LLM-proxy decision trees in `src/prompt_learning/model/`;
+* T5 / TAPEX embeddings of every candidate: `precompute/embeddings/`.
 
 **Optional parts (`ARI/run_optional.sh`):** an NVIDIA GPU with ≥ 24 GB and 16 GB of disk for Llama.
 
@@ -65,7 +62,7 @@ The result is `ARI/out/reproduced_results.pdf`: each reproduced table and figure
 
 Clone the repository as in Section 1.
 
-`data/covertype_expanded.csv` (246 MB) is larger than GitHub allows; `install.sh` downloads it from Zenodo (DOI: TODO) and checks its SHA-256 (`ARI/scripts/fetch_data.py`).
+`data/covertype_expanded.csv` (265 MB) is stored compressed as `data/covertype_expanded.csv.gz`; `install.sh` unpacks it and checks its SHA-256 (`ARI/scripts/unpack_data.py`).
 
 ### 4.2 Install
 
@@ -74,7 +71,7 @@ bash ARI/install.sh            # add --llama to also download Llama-3 for run_op
 conda activate sage            # in new shells
 ```
 
-`install.sh` builds a new conda environment `sage` from `ARI/env/environment.yml` (Python 3.10 and the pinned packages of `requirements.txt`), replacing an existing one of that name. It then downloads `covertype_expanded.csv`, T5 and TAPEX, and runs the checks of Section 4.4. The other scripts activate this environment and stop if a package version differs. To keep it elsewhere:
+`install.sh` builds a new conda environment `sage` from `ARI/env/environment.yml` (Python 3.10 and the pinned packages of `requirements.txt`), replacing an existing one of that name. It then unpacks `covertype_expanded.csv`, downloads T5 and TAPEX, and runs the checks of Section 4.4. The other scripts activate this environment and stop if a package version differs. To keep it elsewhere:
 
 ```bash
 SAGE_ENV=/path/to/envs/sage bash ARI/install.sh      # and the same SAGE_ENV for the other scripts
@@ -96,7 +93,7 @@ python ARI/scripts/check_install.py --online
 bash ARI/scripts/smoke_test.sh
 ```
 
-`check_install.py` reports OK / WARN / FAIL for packages, hardware, datasets, shipped inputs, models and LaTeX, and exits with 1 on any FAIL. `smoke_test.sh` runs SAGE once on Video ($k = 3$, $\theta = 0.3$) and ends with `SMOKE TEST PASSED` (2–5 min).
+`check_install.py` reports OK / WARN / FAIL for packages, hardware, datasets, shipped inputs, models and LaTeX, and exits with 1 on any FAIL. `smoke_test.sh` runs SAGE once on Video (k = 3, θ = 0.3) and ends with `SMOKE TEST PASSED` (2–5 min).
 
 ### 4.5 Data
 
@@ -137,19 +134,49 @@ bash ARI/run_experiments.sh --items table8 --datasets Video
 
 ### 5.1 Table 8
 
-* Marketing, Video, House; $k \in \lbrace 3, 5, 10 \rbrace$; $\theta = 0.30$ (Marketing, Video) or $0.20$ (House), and $0.10$ for $k = 10$.
-* SAGE = `greedy_basic.py`; SAGE+ = `greedy.py` (samples max(50, 20%) of the pruned candidates, 12 workers); Top-k = `greedy_basic.py` with $\theta = 0$.
-* Baselines: each list's k highest-utility tables, scored by `software.py`. Their T(s) was measured by hand and is taken from the paper.
+* Marketing, Video, House; k ∈ {3, 5, 10}; θ = 0.30 (Marketing, Video) or 0.20 (House), and 0.10 for k = 10.
+* SAGE = `greedy_basic.py`; SAGE+ = `greedy.py` (samples max(50, 20%) of the pruned candidates, 12 workers); Top-k = `greedy_basic.py` with θ = 0.
+* Baselines: each list's k highest-utility tables, scored by `software.py` (PowerBI on House: 10% of the rows). Their T(s) was measured by hand and is taken from the paper.
 
 ### 5.2 Table 9 and Fig. 10
 
-* Table 9: Marketing, first 5 attributes, $\theta = 0.1$, $k \in \lbrace 2, 5 \rbrace$. Fig. 10 left: the same variants, $k = 4$, on Marketing, Video and House. Fig. 10 right: SAGE on Video, $k \in \lbrace 5, 10, 15, 20 \rbrace$, $\theta \in \lbrace 0.0, \dots, 1.0 \rbrace$.
+* Table 9: Marketing, first 5 attributes, θ = 0.1, k ∈ {2, 5}. Fig. 10 left: the same variants, k = 4, on Marketing, Video and House. Fig. 10 right: SAGE on Video, k ∈ {5, 10, 15, 20}, θ ∈ {0.0, …, 1.0}.
 * Pruning threshold of the ablation: 0.5 for Marketing, 0.3 for Video and House.
-* By default only the proxy variants run (No PR, SAGE). `bash ARI/run_optional.sh --bf` adds BruteForce and `--llama` adds No PR/PX and No PX. Skipped cells show the paper's values.
+* By default only the proxy variants run (No PR, SAGE). `bash ARI/run_optional.sh --bf` adds BruteForce and `--llama` adds No PR/PX and No PX. Skipped cells show the paper's values (Section 5.5).
 
 ### 5.3 Fig. 11
 
-SAGE and SAGE+ on Marketing and CoverType, $k = 5$, $\theta = 0.1$. x% of tuples = the first x% of rows; x% of attributes = the first round(x/100 · n) columns (n = 28 for Marketing, 110 for CoverType).
+SAGE and SAGE+ on Marketing and CoverType, k = 5, θ = 0.1. x% of tuples = the first x% of rows; x% of attributes = the first round(x/100 · n) columns (n = 28 for Marketing, 110 for CoverType).
+
+### 5.4 What to expect
+
+* Runs with the proxy are deterministic for a fixed seed. Runs that call Llama sample its answers and vary slightly.
+* Runtimes depend on the hardware; compare trends, not seconds. With the embedding banks (default) they exclude encoding; `bash ARI/run_optional.sh --gpu` includes it. On Slurm, request `--cpus-per-task=12` for SAGE+.
+* `run_cached.py` returns the correlation/ratio score of a 1 × 1 pivot table as 0.0 instead of `[0]`, which crashes the original code. Scores are otherwise unchanged.
+
+### 5.5 Without BruteForce: why the claims still hold
+
+BruteForce computes the exact optimum of Problem 2.1. It is off by default because it scores all 130 candidates with Llama (no proxy, no pruning) and enumerates every k-set: C(130, 2) = 8,385 and C(130, 5) ≈ 286M. For Table 9 alone our runs took 7,472 s (k = 2) and 23,680 s (k = 5) on a GPU (paper: 5,817 s and 19,604 s). Without it, Table 9's percentage rows and the BF bars of Fig. 10 show the paper's values.
+
+The paper's core thesis does not depend on BruteForce. The default runs reproduce SAGE's advantage over the baselines (Table 8), its scalability (Fig. 11) and the speed-up from pruning and the proxy (No PR vs. SAGE in Table 9 and Fig. 10). BruteForce supports two narrower claims of §6.4:
+
+| Claim (§6.4) | Evidence without BruteForce (default runs) | Evidence from our BruteForce runs (`run_optional.sh --bf`) |
+|---|---|---|
+| Exhaustive search is infeasible | The search space is C(#PT, k). The No PR run reproduces #PT = 130, so 8,385 and 286M sets | 7,472 s and 23,680 s, vs. 17 s for SAGE |
+| Greedy is close to the optimum | No k-set can have more utility than the k highest-utility candidates, so greedy / top-k is a lower bound on greedy / optimum. In the No PR run: ≥ 97.6% (k = 2), ≥ 91.9% (k = 5) | Plain greedy (No PR/PX) reaches 100% of BruteForce at k = 2 and 5. SAGE reaches 96.6% and 89.5% (paper: 97% and 97%) |
+
+The bound compares sets under the same (proxy) utility, so it isolates the greedy search. To compute it after `bash ARI/run_experiments.sh --items table9`:
+
+```bash
+python - <<'EOF'
+import csv, glob
+for k in (2, 5):
+    run = f"result/paper/table9/sage/marketing_data_full/%s/*do_cacheTrue*do_pruneFalse*_k{k}_*/%s"
+    util = sorted((float(r["utility score"]) for r in csv.DictReader(open(glob.glob(run % ("utility", "utility_scores.csv"))[0]))), reverse=True)
+    greedy = sum(float(r["utility_score"]) for r in csv.DictReader(open(glob.glob(run % ("diversity", "diversity_result.csv"))[0])))
+    print(f"k={k}: greedy {greedy:.3f}, top-k bound {sum(util[:k]):.3f}, greedy >= {100 * greedy / sum(util[:k]):.1f}% of the optimum")
+EOF
+```
 
 ---
 
@@ -191,14 +218,14 @@ bash ARI/run_optional.sh --bf --llama --gpu
 ## 8. Repository map
 
 ```
-sage_reproducibility/
+sage/
 ├── README.md                     this file
 ├── ARI/                          reproducibility scripts
 │   ├── install.sh                step 1: environment, models, checks
 │   ├── run_experiments.sh        step 2: default experiments, figures, report
 │   ├── run_optional.sh           optional GPU experiments (BruteForce, Llama, live encoding)
 │   ├── env/                      environment.yml, requirements.txt
-│   ├── scripts/                  common.sh, fetch_data.py, fetch_models.py, check_install.py, smoke_test.sh,
+│   ├── scripts/                  common.sh, unpack_data.py, fetch_models.py, check_install.py, smoke_test.sh,
 │   │                             make_report.py
 │   └── out/                      reproduced_results.pdf
 ├── paper_figures/                one folder per table / figure
@@ -223,7 +250,7 @@ sage_reproducibility/
 │   └── embeddings/               T5 / TAPEX embedding banks
 ├── baselines/                    DAISY, LLM, Excel, PowerBI, Google Sheets recommendation lists
 ├── daisy.pth                     our DAISY classifier
-├── data/                         marketing_data_full.csv, Video.csv, house.csv, covertype_expanded.csv
+├── data/                         marketing_data_full.csv, Video.csv, house.csv, covertype_expanded.csv.gz
 ├── result/paper/                 run outputs (created by the experiments)
 └── log/                          run logs
 ```
