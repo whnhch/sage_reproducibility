@@ -42,7 +42,7 @@ The result is `ARI/out/reproduced_results.pdf`: each reproduced table and figure
 * trend and surprise likelihoods: the LLM-proxy decision trees in `src/prompt_learning/model/`;
 * T5 / TAPEX embeddings of every candidate: `precompute/embeddings/`.
 
-**Optional parts (`ARI/run_optional.sh`):** an NVIDIA GPU with ≥ 24 GB and 16 GB of disk for Llama.
+**Optional parts (`ARI/run_optional.sh`):** an NVIDIA GPU with $\geq 24$ GB and 16 GB of disk for Llama.
 
 **Software:** conda, and TeX Live with `pgfplots`, `libertine`, `newtx`, `standalone` and `pdfpages` to draw the figures.
 
@@ -97,12 +97,12 @@ bash ARI/scripts/smoke_test.sh
 
 ### 4.5 Data
 
-| Paper name | File | Rows × cols | Source |
+| Paper name | File | Rows $\times$ cols | Source |
 |---|---|---|---|
-| Marketing | `data/marketing_data_full.csv` | 2,240 × 28 | https://www.kaggle.com/datasets/sahilnbajaj/marketing-campaigns-data-set |
-| Video | `data/Video.csv` | 16,598 × 11 | https://www.kaggle.com/datasets/gregorut/videogamesales |
-| House | `data/house.csv` | 1,460 × 81 | https://www.kaggle.com/datasets/animeshparikshya/house-sale-data81-column |
-| CoverType | `data/covertype_expanded.csv` | 581,012 × 110 | https://archive.ics.uci.edu/ml/datasets/Covertype; its 55 attributes, each twice (`_1`, `_2`) |
+| Marketing | `data/marketing_data_full.csv` | $2{,}240 \times 28$ | https://www.kaggle.com/datasets/sahilnbajaj/marketing-campaigns-data-set |
+| Video | `data/Video.csv` | $16{,}598 \times 11$ | https://www.kaggle.com/datasets/gregorut/videogamesales |
+| House | `data/house.csv` | $1{,}460 \times 81$ | https://www.kaggle.com/datasets/animeshparikshya/house-sale-data81-column |
+| CoverType | `data/covertype_expanded.csv` | $581{,}012 \times 110$ | https://archive.ics.uci.edu/ml/datasets/Covertype; its 55 attributes, each twice (`_1`, `_2`) |
 
 Shipped inputs produced offline or collected by hand:
 
@@ -120,7 +120,7 @@ Shipped inputs produced offline or collected by hand:
 
 ## 5. Experiments
 
-**Setup.** `paper_figures/experiments_env.sh` holds the shared settings (seed 42, τ_ρ = 0.8, τ_π = 5.0, per-dataset γ, row fraction and column cap). Every run goes through `src/models/run_cached.py`, which calls the `src/models/*.py` scripts, loads Llama only if the run uses it, and reads the embeddings from `precompute/embeddings/`.
+**Setup.** `paper_figures/experiments_env.sh` holds the shared settings (seed 42, $\tau_\rho = 0.8$, $\tau_\pi = 5.0$, per-dataset $\gamma$, row fraction and column cap). Every run goes through `src/models/run_cached.py`, which calls the `src/models/*.py` scripts, loads Llama only if the run uses it, and reads the embeddings from `precompute/embeddings/`.
 
 **Run.** Each `paper_figures/<item>/run_experiments.sh` loops over the paper's parameter grid. A run writes its results to `result/paper/<item>/<method>/<dataset>/` and a log to `log/paper_*.txt`; the recommended tables are in `diversity/.../selected_queries.json`. A failed run prints `FAILED, see log/...`.
 
@@ -135,7 +135,7 @@ bash ARI/run_experiments.sh --items table8 --datasets Video
 ### 5.1 Table 8
 
 * Marketing, Video, House; $k \in \lbrace 3, 5, 10 \rbrace$; $\theta = 0.30$ (Marketing, Video) or $0.20$ (House), and $0.10$ for $k = 10$.
-* SAGE = `greedy_basic.py`; SAGE+ = `greedy.py` (samples max(50, 20%) of the pruned candidates, 12 workers); Top-k = `greedy_basic.py` with $\theta = 0$.
+* SAGE = `greedy_basic.py`; SAGE+ = `greedy.py` (samples $\max(50, 20\%)$ of the pruned candidates, 12 workers); Top-k = `greedy_basic.py` with $\theta = 0$.
 * Baselines: each list's k highest-utility tables, scored by `software.py` (PowerBI on House: 10% of the rows). Their T(s) was measured by hand and is taken from the paper.
 
 ### 5.2 Table 9 and Fig. 10
@@ -146,7 +146,7 @@ bash ARI/run_experiments.sh --items table8 --datasets Video
 
 ### 5.3 Fig. 11
 
-SAGE and SAGE+ on Marketing and CoverType, $k = 5$, $\theta = 0.1$. x% of tuples = the first x% of rows; x% of attributes = the first round(x/100 · n) columns (n = 28 for Marketing, 110 for CoverType).
+SAGE and SAGE+ on Marketing and CoverType, $k = 5$, $\theta = 0.1$. $x\%$ of tuples = the first $x\%$ of rows; $x\%$ of attributes = the first $\mathrm{round}(x/100 \cdot n)$ columns ($n = 28$ for Marketing, $n = 110$ for CoverType).
 
 ### 5.4 What to expect
 
@@ -161,7 +161,7 @@ Each `paper_figures/<item>/make_<item>.py` draws its table or figure in the pape
 
 | Quantity | Computed from |
 |---|---|
-| Ins, Int, Util | sum over the k selected tables of `utility/utility_scores.csv`; Util = (Ins + Int) / 2 |
+| Ins, Int, Util | sum over the $k$ selected tables of `utility/utility_scores.csv`; $\mathrm{Util} = (\mathrm{Ins} + \mathrm{Int}) / 2$ |
 | m-dist, heatmap | `diversity/selected_distance_matrix.csv` |
 | T(s), Fig. 11 runtime | pruning + utility + embedding + selection time |
 | Online runtime (Table 9, Fig. 10) | utility + embedding + selection time |
@@ -180,7 +180,7 @@ bash ARI/run_experiments.sh --figures-only
 | `ARI/run_experiments.sh [options]` | the default experiments, then the tables, figures and report | no |
 | `ARI/run_optional.sh MODE [options]` | `--bf`: BruteForce (Table 9, Fig. 10 left; ~10 h). `--llama`: variants without the proxy, which call Llama (~5 h). `--gpu`: rerun with live T5 / TAPEX encoding | yes |
 
-Options: `--items table8,table9,fig10,fig11`, `--datasets ...`, `--fig10-parts left|right`, `--iters 0,1,2` (repetitions to average; default one). `run_experiments.sh` also takes `--figures-only` (only draw) and `--paper-text` (τ_ρ = 0.5, τ_π = 2.0, pruning threshold 0.5; writes `result/paper_text/` and `ARI/out/reproduced_results_paper_text.pdf`). `--help` prints all of them.
+Options: `--items table8,table9,fig10,fig11`, `--datasets ...`, `--fig10-parts left|right`, `--iters 0,1,2` (repetitions to average; default one). `run_experiments.sh` also takes `--figures-only` (only draw) and `--paper-text` ($\tau_\rho = 0.5$, $\tau_\pi = 2.0$, pruning threshold $0.5$; writes `result/paper_text/` and `ARI/out/reproduced_results_paper_text.pdf`). `--help` prints all of them.
 
 ```bash
 bash ARI/run_experiments.sh --items fig11 --datasets covertype_expanded
