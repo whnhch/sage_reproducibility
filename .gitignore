@@ -25,3 +25,4 @@ data/covertype_expanded.csv
 # Personal scripts
 gpu_granite*.sh
 remove_later_*.sh
+README_files/
