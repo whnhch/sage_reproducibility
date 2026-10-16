@@ -15,10 +15,10 @@ for ITER in $ITERS; do
       COLS=$(python3 -c "print(round($PCT/100*$(n_columns "$DS")))")
       # tuples: first FRAC of the rows, all columns
       DATA_NUM=$FRAC run_pipeline ./src/models/greedy_basic.py "$DS" $K $TH "$OUT/tuples/sage/$DS/$(iter_dir "$ITER")"
-      DATA_NUM=$FRAC run_pipeline ./src/models/greedy.py       "$DS" $K $TH "$OUT/tuples/sage_plus/$DS/$(iter_dir "$ITER")"
+      DATA_NUM=$FRAC DO_PARALLEL=true run_pipeline ./src/models/greedy.py "$DS" $K $TH "$OUT/tuples/sage_plus/$DS/$(iter_dir "$ITER")"
       # attributes: all rows, first COLS columns
       DATA_NUM=1.0 MAX_COLS=$COLS run_pipeline ./src/models/greedy_basic.py "$DS" $K $TH "$OUT/attributes/sage/$DS/$(iter_dir "$ITER")"
-      DATA_NUM=1.0 MAX_COLS=$COLS run_pipeline ./src/models/greedy.py       "$DS" $K $TH "$OUT/attributes/sage_plus/$DS/$(iter_dir "$ITER")"
+      DATA_NUM=1.0 MAX_COLS=$COLS DO_PARALLEL=true run_pipeline ./src/models/greedy.py "$DS" $K $TH "$OUT/attributes/sage_plus/$DS/$(iter_dir "$ITER")"
     done
   done
 done

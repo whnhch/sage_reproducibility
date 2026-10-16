@@ -48,6 +48,8 @@ def collect_results(paper, root, prov):
                     filt = dict(filename=f, k=5, data_num=pct / 100)
                 else:
                     filt = dict(filename=f, k=5, data_num=1.0, max_columns=round(pct / 100 * N_COLUMNS[f]))
+                if variant == "sage_plus":
+                    filt["do_parallel"] = True
                 got = None
                 for rel in result_dirs(DIRS[(panel, variant)]):
                     base = os.path.join(root, rel)

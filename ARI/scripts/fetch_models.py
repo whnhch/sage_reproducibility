@@ -22,7 +22,8 @@ def main():
         sys.exit("Set TRANSFORMER_PATH to the folder that should hold the models, e.g. TRANSFORMER_PATH=~/hf_cache")
     cache = os.path.expanduser(cache)
     os.makedirs(cache, exist_ok=True)
-    os.environ["HF_HOME"] = cache  # must be set before huggingface_hub is imported
+    for var in ("HF_HOME", "TRANSFORMERS_CACHE", "HF_HUB_CACHE"):  # where the runs look; before importing huggingface_hub
+        os.environ[var] = cache
     from huggingface_hub import snapshot_download
 
     with_llama = "--llama" in sys.argv[1:]
