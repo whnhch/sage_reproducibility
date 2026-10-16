@@ -30,8 +30,8 @@ def parse_args():
     parser.add_argument('--data_num', type=float, default=0.2, help='The number/fraction of rows of data')
     parser.add_argument('--max_columns', type=int, default=None, help='Maximum number of columns to use from the DataFrame')
 
-    parser.add_argument('--tau_cor', type=float, default=0.7, help='for correlation tau')
-    parser.add_argument('--tau_rat', type=float, default=5.0, help='for ratio tau')
+    parser.add_argument('--tau_cor', type=float, default=0.5, help='for correlation tau')
+    parser.add_argument('--tau_rat', type=float, default=2.0, help='for ratio tau')
     
     parser.add_argument('--output_dir', type=str, default='result/bruteforce/', help='output directory')
 

@@ -35,8 +35,8 @@ def parse_args():
     parser.add_argument('--clf_trd_path', type=str, default='prompt_learning/model/marketing_data_10000_decision_tree.pkl', help='for trend prompt cache path')
     parser.add_argument('--clf_out_path', type=str, default='prompt_learning/model/marketing_data_10000_outlier_decision_tree.pkl', help='for outlier prompt cache path')
     
-    parser.add_argument('--tau_cor', type=float, default=0.7, help='for correlation tau')
-    parser.add_argument('--tau_rat', type=float, default=5.0, help='for ratio tau')
+    parser.add_argument('--tau_cor', type=float, default=0.5, help='for correlation tau')
+    parser.add_argument('--tau_rat', type=float, default=2.0, help='for ratio tau')
     
     parser.add_argument('--output_dir', type=str, default='result/software/', help='output directory')
 

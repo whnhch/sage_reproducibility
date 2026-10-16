@@ -124,7 +124,7 @@ The shipped trees in `src/prompt_learning/model/` are kept; rerun the experiment
 
 ## 5. Experiments
 
-**Setup.** `paper_figures/experiments_env.sh` holds the shared settings (seed 42, $\tau_\rho = 0.8$, $\tau_\pi = 5.0$, per-dataset $\gamma$, row fraction and column cap).
+**Setup.** `paper_figures/experiments_env.sh` holds the shared settings (seed 42, $\tau_\rho = 0.5$, $\tau_\pi = 2.0$, per-dataset $\gamma$, row fraction and column cap).
 
 **Run.** Each `paper_figures/<item>/run_experiments.sh` loops over the paper's parameter grid. A run writes its results to `result/paper/<item>/<method>/<dataset>/` and a log to `log/paper_*.txt`; the recommended tables are in `diversity/.../selected_queries.json`. A failed run prints `FAILED, see log/...`.
 
@@ -181,7 +181,7 @@ bash ARI/run_experiments.sh --figures-only
 | `ARI/run_experiments.sh [options]` | the default experiments, then the tables, figures and report | no |
 | `ARI/run_optional.sh MODE [options]` | `--bf`: BruteForce (Table 9, Fig. 10 left; ~10 h). `--llama`: variants without the proxy, which call Llama (~5 h). `--gpu`: rerun with live T5 / TAPEX encoding. `--proxy`: regenerate the LLM-proxies into `result/proxy/` (Section 4.5) | yes |
 
-Options: `--items table8,table9,fig10,fig11`, `--datasets ...`, `--fig10-parts left|right`, `--iters 0,1,2` (repetitions to average; default one). `run_experiments.sh` also takes `--figures-only` (only draw) and `--paper-text` ($\tau_\rho = 0.5$, $\tau_\pi = 2.0$, pruning threshold $0.5$; writes `result/paper_text/`, `paper_figures/out_paper_text/` and `ARI/out/reproduced_results_paper_text.pdf`; first build its embedding banks on a GPU with `PARAMS=paper_text python -m src.diversity.embedding_bank`). `--help` prints all of them.
+Options: `--items table8,table9,fig10,fig11`, `--datasets ...`, `--fig10-parts left|right`, `--iters 0,1,2` (repetitions to average; default one). `run_experiments.sh` also takes `--figures-only` (only draw) and `--paper-text` (pruning threshold $0.5$ everywhere, as in the paper text; writes `result/paper_text/`, `paper_figures/out_paper_text/` and `ARI/out/reproduced_results_paper_text.pdf`; first build its embedding banks on a GPU with `PARAMS=paper_text python -m src.diversity.embedding_bank`). `--help` prints all of them.
 
 ```bash
 bash ARI/run_experiments.sh --items fig11 --datasets covertype_expanded
@@ -247,8 +247,6 @@ sage_reproducibility/
 * The LLM-proxy trees are trained on a random 80/20 split and break ties between equally good splits at random. A retrained tree, and the likelihoods it gives, can differ from the shipped one.
 
 With the shipped trees and precomputed inputs (the default), runs are deterministic for a fixed seed.
-
-**Video.** With the shipped inputs, 36 candidates survive pruning on Video. SAGE+ samples $\max(50, 20\%)$ of them, so it keeps all 36 and matches SAGE closely. The paper's Video runs appear to have had a larger candidate pool: there SAGE finds 5 tables at $k = 5$ (4 here) and SAGE+ samples a subset, so its Ins is lower (e.g. 0.54 against 2.40 here at $k = 10$).
 
 **Runtime.** T(s) and the runtimes of Table 9 and Figs. 10–11 depend on the hardware.
 * SAGE+ computes utilities in 12 worker processes. With fewer cores it slows down and its speedup over SAGE shrinks.

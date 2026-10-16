@@ -12,18 +12,18 @@ export TRANSFORMERS_CACHE="$TRANSFORMER_PATH"
 export HF_DATASETS_CACHE="$TRANSFORMER_PATH"
 
 SEED=42
-TAU_COR=0.8
-TAU_RAT=5.0
+TAU_COR=0.5
+TAU_RAT=2.0
 ITERS="${ITERS:-0}"              # ITERS="0 1 2" averages three repetitions
 iter_dir() { [ "$1" = 0 ] || echo "iter$1/"; }
 method_of() {  # output name of a run script: SAGE = greedy_basic.py, SAGE+ = greedy.py
   case "$(basename "$1" .py)" in greedy_basic) echo sage ;; greedy) echo sage_plus ;; *) basename "$1" .py ;; esac
 }
-# PARAMS=paper_text: the paper text's parameters, separate results and logs.
+# PARAMS=paper_text: pruning threshold 0.5 everywhere, separate results and logs.
 PARAMS="${PARAMS:-code}"
 LOG_TAG=""
 if [ "$PARAMS" = paper_text ]; then
-  TAU_COR=0.5 TAU_RAT=2.0 LOG_TAG=paper_text_
+  LOG_TAG=paper_text_
   export FIG10_SMALL_INT_THRESHOLD=0.5 COVERTYPE_INT_THRESHOLD=0.5
   OUT_ROOT="${OUT_ROOT:-result/paper_text/paper}"
 elif [ "$PARAMS" != code ]; then
