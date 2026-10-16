@@ -146,8 +146,6 @@ def main(args):
         df = df.iloc[:int(args.data_num)].reset_index(drop=True)
     
     frac = 0.2
-    if 'video' in filename.lower():
-        frac = 1.0
     n_pts = max(50, int(len(pruned_result) * frac))
     pruned_result = random.sample(pruned_result, min(len(pruned_result), n_pts)) 
 

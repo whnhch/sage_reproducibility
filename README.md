@@ -248,7 +248,7 @@ sage_reproducibility/
 
 With the shipped trees and precomputed inputs (the default), runs are deterministic for a fixed seed.
 
-**SAGE+ on Video.** Video's pruned candidate set is small, so SAGE+ keeps all of it instead of sampling $\max(50, 20\%)$ (`src/models/greedy.py`). The paper does not mention this.
+**Video.** With the shipped inputs, 36 candidates survive pruning on Video. SAGE+ samples $\max(50, 20\%)$ of them, so it keeps all 36 and matches SAGE closely. The paper's Video runs appear to have had a larger candidate pool: there SAGE finds 5 tables at $k = 5$ (4 here) and SAGE+ samples a subset, so its Ins is lower (e.g. 0.54 against 2.40 here at $k = 10$).
 
 **Runtime.** T(s) and the runtimes of Table 9 and Figs. 10–11 depend on the hardware.
 * SAGE+ computes utilities in 12 worker processes. With fewer cores it slows down and its speedup over SAGE shrinks.

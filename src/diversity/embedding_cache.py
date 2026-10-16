@@ -107,7 +107,7 @@ def candidate_inputs(args, prune_dir, df_full=None):
         pruned = combs
 
     if args.script == "greedy":  # SAGE+: same sample as src/models/greedy.py
-        frac = 1.0 if "video" in args.filename.lower() else 0.2
+        frac = 0.2
         n_pts = max(50, int(len(pruned) * frac))
         pruned = random.sample(pruned, min(len(pruned), n_pts))
 
