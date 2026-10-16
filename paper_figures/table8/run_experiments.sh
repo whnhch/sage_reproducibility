@@ -1,13 +1,6 @@
 #!/bin/bash
-# Raw results for Table 8.
-# Writes result/paper/table8/<method>/..., which make_table8.py --source results reads.
-#
-#   SAGE   : src/models/greedy_basic.py (all pruned candidates)
-#   SAGE+  : src/models/greedy.py       (samples 20% of pruned candidates, parallel utility)
-#   Top-k  : greedy_basic.py with theta = 0 (no diversity constraint, same optimizations)
-#   DAISY / LLMs / PowerBI / GSheets / Excel : their recommended lists in baselines/*.csv,
-#            scored with src/models/software.py. Set REGEN_BASELINES=1 to first regenerate
-#            the LLM and DAISY lists (Excel/PowerBI/GSheets were collected by hand).
+# Table 8 runs -> result/paper/table8/. SAGE = greedy_basic.py, SAGE+ = greedy.py, Top-k = SAGE with theta 0;
+# the baseline lists in baselines/ are scored with software.py (REGEN_BASELINES=1 regenerates LLM and DAISY).
 source "$(dirname "${BASH_SOURCE[0]}")/../experiments_env.sh"
 OUT="$OUT_ROOT/table8"
 

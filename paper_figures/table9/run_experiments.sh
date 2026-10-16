@@ -1,11 +1,8 @@
 #!/bin/bash
-# Raw results for Table 9: BruteForce and the PR/PX ablation on the first 5 attributes of
-# Marketing, theta = 0.1, k = 2 and 5. Writes result/paper/table9/{bruteforce,sage}/...
-#
-# By default only the variants with the LLM-proxy run (No PR, SAGE): a few minutes. Two switches add the rest:
-#   WITH_BF=1        BruteForce: enumerates C(130, k) sets, about 1.6 h for k = 2 and 5.4 h for k = 5 (paper runtimes)
-#   WITH_NO_PROXY=1  No PR/PX and No PX: call Llama on the GPU for every candidate, about 1.4 h and 8 min per k
-# Cells of skipped variants are filled from the paper by make_table9.py and listed in table9_provenance.csv.
+# Table 9 runs: PR/PX ablation on Marketing's first 5 attributes, theta 0.1, k 2 and 5 -> result/paper/table9/
+#   WITH_BF=1        add BruteForce (hours)
+#   WITH_NO_PROXY=1  add No PR/PX and No PX (Llama on the GPU)
+# Skipped cells are filled from the paper (table9_provenance.csv).
 source "$(dirname "${BASH_SOURCE[0]}")/../experiments_env.sh"
 OUT="$OUT_ROOT/table9"
 DS=marketing_data_full

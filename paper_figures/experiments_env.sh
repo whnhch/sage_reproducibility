@@ -1,6 +1,5 @@
 #!/bin/bash
-# Shared settings for paper_figures/*/run_experiments.sh.
-# Override any of them from the environment, e.g. TRANSFORMER_PATH=~/hf_cache bash table8/run_experiments.sh
+# Shared settings for paper_figures/*/run_experiments.sh; each can be overridden from the environment.
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR" || exit 1
@@ -15,12 +14,12 @@ export HF_DATASETS_CACHE="$TRANSFORMER_PATH"
 SEED=42
 TAU_COR=0.8
 TAU_RAT=5.0
-ITERS="${ITERS:-0}"              # one pass: runs with the LLM-proxy are seeded and repeat exactly; ITERS="0 1 2" averages three
-iter_dir() { [ "$1" = 0 ] || echo "iter$1/"; }   # sub-folder of repetition $1 (none for the first pass)
+ITERS="${ITERS:-0}"              # ITERS="0 1 2" averages three repetitions
+iter_dir() { [ "$1" = 0 ] || echo "iter$1/"; }
 method_of() {  # output name of a run script: SAGE = greedy_basic.py, SAGE+ = greedy.py
   case "$(basename "$1" .py)" in greedy_basic) echo sage ;; greedy) echo sage_plus ;; *) basename "$1" .py ;; esac
 }
-# PARAMS=paper_text: tau_rho 0.5, tau_pi 2.0, pruning threshold 0.5 everywhere; separate results and logs.
+# PARAMS=paper_text: the paper text's parameters, separate results and logs.
 PARAMS="${PARAMS:-code}"
 LOG_TAG=""
 if [ "$PARAMS" = paper_text ]; then
@@ -32,9 +31,17 @@ elif [ "$PARAMS" != code ]; then
 fi
 OUT_ROOT="${OUT_ROOT:-result/paper}"
 PROXY_DIR="${PROXY_DIR:-./src/prompt_learning/model}"   # LLM-proxy decision trees
-# Every run goes through src/models/run_cached.py: Llama-3 is loaded only if the run calls it (no LLM-proxy,
-# BruteForce), and EMBEDDINGS=bank (default) reads the T5 / TAPEX vectors from precompute/embeddings/
-# instead of encoding them. EMBEDDINGS=live encodes them (GPU), so runtimes include encoding.
+# proxy_args <dataset>: sets PROXY_ARGS to its trees in PROXY_DIR.
+proxy_args() {
+  local p="$PROXY_DIR/${1}_10000"
+  if [ -f "${p}_ratio_decision_tree.pkl" ]; then
+    PROXY_ARGS=(--clf_trd_path "${p}_correlation_decision_tree.pkl" --clf_rat_path "${p}_ratio_decision_tree.pkl")
+  else
+    PROXY_ARGS=(--clf_trd_path "${p}_decision_tree.pkl")
+  fi
+  PROXY_ARGS+=(--clf_out_path "${p}_outlier_decision_tree.pkl")
+}
+# EMBEDDINGS=bank reads precomputed T5 / TAPEX vectors; live encodes them (GPU), so runtimes include encoding.
 EMBEDDINGS="${EMBEDDINGS:-bank}"
 mkdir -p log "$OUT_ROOT"
 
@@ -50,12 +57,9 @@ dataset_config() {
 }
 
 # run_pipeline <script.py> <dataset> <k> <theta> <output_dir>
-# Optional env overrides per call: DO_PRUNE DO_CACHE DO_INT_CACHE DO_PARALLEL DATA_NUM MAX_COLS INT_TH
-#   DO_CACHE=true  -> LLM-proxy decision trees instead of Llama calls (the "PX" optimization)
-#   DO_PRUNE=true  -> offline pruning (the "PR" optimization)
+# Per-call env overrides: DO_PRUNE (PR) DO_CACHE (PX: LLM-proxy) DO_INT_CACHE DO_PARALLEL DATA_NUM MAX_COLS INT_TH
 # run_done <output_dir> <dataset> <k> <theta> <data_num> <max_columns> <int_threshold> <do_prune> <do_cache> <do_parallel>
-# True if that run already finished: its diversity folder, named like src/helper.py::param_dict_to_folder,
-# holds diversity_result.csv.
+# True if that run already finished.
 run_done() {
   python3 - "$@" <<'PY'
 import os, sys
@@ -78,6 +82,7 @@ run_pipeline() {
     return 0
   fi
   local extra=()
+  proxy_args "$ds"
   # bruteforce.py has no --do_int_cache flag
   [ "$(basename "$script")" != "bruteforce.py" ] && extra=(--do_int_cache "${DO_INT_CACHE:-true}")
   local log_file="log/paper_${LOG_TAG}$(echo "${out#"$OUT_ROOT"/}" | tr '/' '_')${method}_k${k}_th${theta}_pr${DO_PRUNE:-true}_px${DO_CACHE:-true}_dn${DATA_NUM:-all}_mc${MAX_COLS:-all}.txt"
@@ -87,8 +92,7 @@ run_pipeline() {
     --transformer_path "$TRANSFORMER_PATH" --hf_token_path "$HF_TOKEN_PATH" \
     --seed "$SEED" --gamma "$GAMMA" --df_sample_num "$DF_SAMPLE_NUM" \
     --int_threshold "${INT_TH:-$INT_THRESHOLD}" --threshold "$theta" --k "$k" \
-    --clf_trd_path "$PROXY_DIR/${ds}_10000_decision_tree.pkl" \
-    --clf_out_path "$PROXY_DIR/${ds}_10000_outlier_decision_tree.pkl" \
+    "${PROXY_ARGS[@]}" \
     --tau_cor "$TAU_COR" --tau_rat "$TAU_RAT" \
     --do_prune "${DO_PRUNE:-true}" --do_cache "${DO_CACHE:-true}" \
     "${extra[@]}" \
@@ -113,12 +117,12 @@ score_recommendations() {
     return 0
   fi
   echo "[$(date +%H:%M:%S)] software.py $comb ($ds, k=$k) -> $out"
+  proxy_args "$ds"
   python -B -m src.models.run_cached software \
     --filename "$ds" --filepath "./data/" --combname "$comb" --combpath "./baselines/" \
     --transformer_path "$TRANSFORMER_PATH" --hf_token_path "$HF_TOKEN_PATH" \
     --seed "$SEED" --k "$k" --gamma "$GAMMA" --df_sample_num "$DF_SAMPLE_NUM" \
-    --clf_trd_path "$PROXY_DIR/${ds}_10000_decision_tree.pkl" \
-    --clf_out_path "$PROXY_DIR/${ds}_10000_outlier_decision_tree.pkl" \
+    "${PROXY_ARGS[@]}" \
     --tau_cor "$TAU_COR" --tau_rat "$TAU_RAT" \
     --data_num "$frac" --max_columns "$MAX_COLUMNS" \
     --attribute_aggfunc_ranks "./precompute/${ds}_attribute_aggfunc_ranks.json" \

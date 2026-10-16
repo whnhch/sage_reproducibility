@@ -1,12 +1,11 @@
 #!/bin/bash
 # Step 2: run the default experiments (no GPU), then draw the tables, figures and report.
 #   bash ARI/run_experiments.sh [--items LIST] [--datasets LIST] [--fig10-parts LIST] [--iters LIST]
-#   bash ARI/run_experiments.sh --figures-only      only draw (needs TeX Live)
-#   --paper-text   tau_rho 0.5, tau_pi 2.0 and pruning threshold 0.5; writes result/paper_text/,
-#                  paper_figures/out_paper_text/ and ARI/out/reproduced_results_paper_text.pdf
-#                  (first, on a GPU: PARAMS=paper_text python -m src.diversity.embedding_bank)
+#   --figures-only  only draw (needs TeX Live)
+#   --paper-text    the paper text's parameters (tau_rho 0.5, tau_pi 2.0, pruning 0.5), separate outputs;
+#                   first, on a GPU: PARAMS=paper_text python -m src.diversity.embedding_bank
 #   e.g. --items fig11 --datasets covertype_expanded
-# Finished runs are skipped; FORCE=1 reruns them. GPU experiments: ARI/run_optional.sh.
+# FORCE=1 reruns finished runs. GPU experiments: ARI/run_optional.sh.
 set -uo pipefail
 source "$(dirname "${BASH_SOURCE[0]}")/scripts/common.sh"
 

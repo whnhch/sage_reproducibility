@@ -105,7 +105,7 @@ def check_files(skip_hash):
         report("OK" if ok else "FAIL", f"dataset {name} ({rows} rows x {cols} columns)",
                "" if ok else "sha256 differs from the copy used for the paper")
     for ds in PROXY_DATASETS:
-        for kind in ("", "outlier_"):
+        for kind in ("correlation_", "ratio_", "outlier_"):
             p = os.path.join(ROOT, "src", "prompt_learning", "model", f"{ds}_10000_{kind}decision_tree.pkl")
             report("OK" if os.path.exists(p) else "FAIL", f"LLM-proxy {os.path.basename(p)}")
         for suffix in ("attribute_aggfunc_ranks.json", "interesting_attrs.json"):

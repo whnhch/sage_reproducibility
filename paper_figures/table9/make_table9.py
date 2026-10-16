@@ -1,19 +1,10 @@
 #!/usr/bin/env python3
-"""Table 9 of sage.pdf: ablation of pruning (PR) and LLM-proxy (PX) vs. BruteForce
-(Marketing, first 5 attributes, theta = 0.1, k = 2 and 5).
+"""Table 9: pruning (PR) and LLM-proxy (PX) ablation vs. BruteForce (Marketing, 5 attributes, theta 0.1, k 2, 5).
 
     python paper_figures/table9/make_table9.py                    # numbers as printed in the paper
     python paper_figures/table9/make_table9.py --source results   # recompute from result/
 
-Variant -> run flags (see run_experiments.sh):
-    BruteForce : src/models/bruteforce.py   --do_prune false --do_cache false
-    No PR/PX   : src/models/greedy_basic.py --do_prune false --do_cache false
-    No PR      : src/models/greedy_basic.py --do_prune false --do_cache true
-    No PX      : src/models/greedy_basic.py --do_prune true  --do_cache false
-    SAGE       : src/models/greedy_basic.py --do_prune true  --do_cache true
-(--do_cache true means the LLM-proxy decision trees replace Llama calls.)
-Utility / Ins / Int are reported as % of BruteForce; runtime is the online phase
-(utility + embedding + selection; pruning is offline, Section 6.2).
+Utility / Ins / Int are % of BruteForce; runtime is the online phase.
 """
 import argparse
 import os

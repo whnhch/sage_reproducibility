@@ -1,33 +1,15 @@
-"""Embedding bank: encode every candidate pivot table once with T5 (query) and TAPEX (table), save it,
-and later index it for any greedy_basic.py / greedy.py / bruteforce.py run instead of running the encoders.
+"""Embedding bank: T5 (query) and TAPEX (table) vectors of every candidate pivot table, encoded once and
+indexed by greedy_basic.py / greedy.py / bruteforce.py runs instead of running the encoders.
 
     python -m src.diversity.embedding_bank --dry_run true                 # what would be built (no models)
     python -m src.diversity.embedding_bank --transformer_path ~/hf_cache  # build or extend all banks (GPU)
     python -m src.diversity.embedding_bank --datasets Video house         # only these datasets
-    python -m src.diversity.embedding_bank --verify true                  # build, then check every run against
-                                                                          # a direct computation (slow)
-In a run:
-    from src.diversity.embedding_bank import bank_path, run_combined
-    combined = run_combined(bank_path(args, "greedy_basic"), sql_queries)   # = concat_embeddings(...) of the run
+    python -m src.diversity.embedding_bank --verify true                  # also check against direct encoding
 
-Why vectors are stored per padded length
-  The runs embed 32 candidates at a time (src/diversity/helper.py::get_all_embeddings) and mean-pool over
-  every position of the padded batch, so a vector depends on L, the longest input in its batch:
-    T5:    padding is masked, so the vector is a function of (query, L) only.
-    TAPEX: the attention mask is padded with the pad id (1), so padding is attended and the vector changes
-           a lot with L (e.g. +109% for a 58-token table padded to 108).
-  A bank therefore stores, for every candidate, its token lengths and its vectors at each L that the
-  planned runs produce. Indexing works out L per batch for any run order and returns exactly the vectors
-  the run would compute. A new configuration only adds the (candidate, L) vectors it is missing.
-
-One bank per dataset and row selection, since a pivot table's content depends on its rows:
-    <output_dir>/<dataset>_<head|sample>_dn<data_num>.npz
-  head   = first rows (greedy_basic.py, greedy.py);  sample = df.sample(random_state=42) (bruteforce.py)
-  keys, q_len, t_len           SQL text of each candidate and its T5 / TAPEX token lengths
-  q_key, q_L, q_vec            T5 vectors: candidate index, padded length, 1024 floats
-  t_key, t_L, t_vec            TAPEX vectors, same layout
-  meta                         JSON: configurations covered, models, batch size, encoding time, device
-The configurations come from paper_figures/*/run_experiments.sh (PAPER_PLAN below).
+Runs mean-pool over padded batches of 32, so a vector depends on its batch's padded length L (TAPEX attends
+to padding). A bank stores each candidate's vectors at every L the runs in PAPER_PLAN produce, so indexing
+returns exactly the vectors a run computes. One bank per dataset and row selection:
+<output_dir>/<dataset>_<head|sample>_dn<data_num>.npz (head: first rows; sample: bruteforce.py's df.sample).
 """
 import argparse
 import json

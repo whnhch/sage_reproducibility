@@ -585,17 +585,13 @@ class ImprovedInsightfulness:
     def calculate_inf_approx_rp(self, t: pd.DataFrame, epsilon: float = 0.1) -> float:
         n, m = t.shape
         
-        # Calculate target dimension k based on JL-lemma
-        # The number of points is max(n, m)
+        # JL-lemma target dimension
         num_points = max(n, m)
         if num_points <= 1: 
             return 0.0
         
-        # k is typically ceil(log(num_points) / (epsilon**2))
-        # Let's cap k at a reasonable value for performance benefit
         k = int(np.ceil(np.log(num_points) / (epsilon**2)))
         
-        # Ensure k is smaller than the original dimension for projection
         k = min(k, m - 1) # For row projection
         k_prime = min(k, n - 1) # For column projection
         
@@ -645,22 +641,15 @@ class ImprovedInsightfulness:
         n, m = t.shape
         data_array = t.values
 
-        # Helper function from the original code (or a placeholder for external logic)
         def bucketize_correlation(abs_val):
-            # Placeholder for external function
             return int(abs_val * 10) # Example: maps 0.8 to 8
 
-        # Helper function from the original code (or a simplified placeholder)
         def get_correlation_likelihood(i, j, val, IsRow):
-            # Placeholder: This is the complex external logic, we assume it's fast
-            # or that the cost of calculating it is dominated by correlation computation.
             if self.clf_trd:
-                # Assume self.pr.prepare_correlation_clf and self.get_likelihood_clf exist
                 cor_vars = self.pr.prepare_correlation_clf(i, j, isRow=IsRow)
                 cor_vars['bucket'] = bucketize_correlation(abs(val))
                 result = self.get_likelihood_clf('correlation', cor_vars)
             else:
-                # Assume self.pr.prepare_correlation and self.get_likelihood exist
                 sign = "positive" if val >= 0 else "negative"
                 cor_vars = self.pr.prepare_correlation(i, j, val, sign, isRow=IsRow)
                 result = self.get_likelihood('correlation', cor_vars)
@@ -675,7 +664,7 @@ class ImprovedInsightfulness:
             num_possible_pairs = N_size * (N_size - 1) // 2
             
             if not approximate or k >= num_possible_pairs:
-                # --- Exact Computation Fallback ---
+                # exact
                 corr = np.corrcoef(arr)
                 corr = np.nan_to_num(corr, nan=0)
 
@@ -685,7 +674,6 @@ class ImprovedInsightfulness:
 
                 mask = abs_corr_vals > tau_cor
                 
-                # Weighted sum of scores for high-correlation pairs
                 weighted_sum = 0.0
                 for i, j, val in zip(i_indices[mask], j_indices[mask], corr_vals[mask]):
                     likelihood = get_correlation_likelihood(i, j, val, IsRow)
@@ -693,58 +681,36 @@ class ImprovedInsightfulness:
                     
                 return weighted_sum / num_possible_pairs
 
-            # --- Random Subsampling Approximation ---
-            
-            # 1. Generate k random pairs of indices (i, j) where i < j
+            # approximate: score k random pairs
             indices = list(range(N_size))
             all_pairs = [(i, j) for i in range(N_size) for j in range(i + 1, N_size)]
             
-            # Limit sampling to the total number of pairs
             if k < len(all_pairs):
                 sampled_pairs = random.sample(all_pairs, k)
             else:
                 sampled_pairs = all_pairs # Fallback, though k check should prevent this
 
-            # 2. Compute correlation and score only for sampled pairs
             sampled_scores = []
             for i, j in sampled_pairs:
-                # Pearson correlation between vector i and vector j
-                # pearsonr returns (correlation, p-value); we need the correlation
                 val, _ = pearsonr(arr[i], arr[j])
                 
-                # Handle NaN correlation (e.g., if one vector has zero variance)
                 if np.isnan(val):
                     val = 0.0
                 
                 abs_val = np.abs(val)
                 
-                # Apply the original threshold logic
                 if abs_val > tau_cor:
-                    # Apply the external likelihood logic
                     likelihood = get_correlation_likelihood(i, j, val, IsRow)
                     sampled_scores.append(likelihood * abs_val)
             
-            # 3. The final score is the sum of weighted scores, normalized by the
-            # total number of possible pairs (N * (N-1) / 2), not just k.
-            # However, to be a proper unbiased estimator of the *average*, we use k.
-            # But since the original score is defined as: (Sum of Weighted High-Corr Pairs) / (Total Pairs)
-            # We need to scale the average by the ratio of (Total Pairs) / k.
-            
-            # A simpler way to interpret the approximation:
-            # Estimated Sum of Weighted High-Corr Pairs = sum(sampled_scores) * (Total Pairs / k)
-            # Approx Score = (Estimated Sum) / (Total Pairs) = sum(sampled_scores) / k
-            
+            # unbiased estimate of the exact score: sum / k
             if not sampled_scores:
                 return 0.0
                 
             return np.sum(sampled_scores) / k
             
-        # --- Row Informativeness ---
-        # data_array is n x m. We calculate correlation between rows.
         row_corr_score = compute_approx_corr_score(data_array, tau, IsRow=True, k=k_pairs)
 
-        # --- Column Informativeness ---
-        # Transpose data_array to calculate correlation between columns.
         data_array_cols = data_array.T
         col_corr_score = compute_approx_corr_score(data_array_cols, tau, IsRow=False, k=k_pairs)
 
@@ -755,47 +721,32 @@ class ImprovedInsightfulness:
     def calculate_ratio_approx(self, t: pd.DataFrame, k_pairs: int = 5000, approximate: bool = True):
         n, m = t.shape
         
-        # --- Helper Functions (Simplified/Placeholder) ---
         def bucketize_ratio(abs_val):
-            # Placeholder for external function
-            return int(min(abs_val, 10)) # Example
+            return int(min(abs_val, 10))
         
         def get_ratio_likelihood(i, j, val, isRow):
-            # Placeholder for external function
-            # Assume this returns a likelihood value (float)
-            # We need a placeholder for the logic that uses self.clf_trd, etc.
-            return 1.0 # Simple placeholder for demonstration
+            return 1.0
             
         def get_inverese_ratio(arr):
-            # This function is part of the final score calculation
             with np.errstate(divide='ignore', invalid='ignore'):
                 inf_mask = arr != np.inf
                 null_mask = arr != 0.0
                 result = np.zeros_like(arr, dtype=np.float64)
-                # The calculation: 1 - 1 / (Likelihood * Ratio)
                 result[inf_mask & null_mask] = 1 - 1 / arr[inf_mask & null_mask]
                 
                 return np.sum(result)
 
         def compute_high_ratio_pairs_for_pair(vector1, vector2, tau):
-            # Placeholder for the ratio calculation logic for a single pair.
-            # This is where the heavy lifting for a single pair happens.
-            
-            # Example: Calculate the max element-wise ratio
-            # Assuming only positive values for simplicity, which is common for ratios.
+            # max element-wise ratio, if above tau
             with np.errstate(divide='ignore', invalid='ignore'):
                 ratios = np.maximum(vector1 / vector2, vector2 / vector1)
             
-            # We need a single ratio value (or min/max/average of ratios) to check against tau.
-            # Let's assume the function returns the maximum ratio across all elements.
             max_ratio = np.nanmax(ratios) if not np.all(np.isnan(ratios)) else 0.0
             
             if max_ratio > tau:
-                # The actual ratio value used in the final score is returned here
                 return max_ratio
             return None
 
-        # --- Core Approximation Logic ---
         def compute_approx_ratio_score(arr, tau_rat, IsRow, k):
             N_size = arr.shape[0] # Number of vectors (n or m)
             
@@ -805,13 +756,8 @@ class ImprovedInsightfulness:
             num_possible_pairs = N_size * (N_size - 1) // 2
             
             if not approximate or k >= num_possible_pairs:
-                # Fallback to Exact Computation (requires the original compute_high_ratio_pairs)
-                # Since that function is not provided, we rely on the approximation pathway.
-                # In a real scenario, the original logic would be here.
-                
-                # Placeholder for exact computation:
+                # exact
                 high_rat_pairs, high_rat_vals = compute_high_ratio_pairs(arr, tau=tau_rat)
-                # The rest of the original logic follows...
                 if len(high_rat_pairs) == 0:
                     return 0.0
                 else:
@@ -821,9 +767,7 @@ class ImprovedInsightfulness:
                     return get_inverese_ratio(mins) / num_possible_pairs
 
 
-            # --- Random Subsampling Approximation ---
-            
-            # 1. Generate k random pairs of indices (i, j) where i < j
+            # approximate: score k random pairs
             indices = list(range(N_size))
             all_pairs = [(i, j) for i in range(N_size) for j in range(i + 1, N_size)]
             
@@ -832,48 +776,26 @@ class ImprovedInsightfulness:
             else:
                 sampled_pairs = all_pairs 
 
-            # 2. Compute ratio and score only for sampled pairs
             weighted_ratios_list = []
             for i, j in sampled_pairs:
                 vec_i, vec_j = arr[i], arr[j]
                 
-                # Calculate the ratio value and check the threshold
                 ratio_val = compute_high_ratio_pairs_for_pair(vec_i, vec_j, tau_rat)
                 
-                if ratio_val is not None: # If the pair exceeded the threshold
-                    # Apply the external likelihood logic
+                if ratio_val is not None:
                     likelihood = get_ratio_likelihood(i, j, ratio_val, IsRow)
-                    
-                    # The score uses Likelihood * Ratio
                     weighted_ratios_list.append(likelihood * ratio_val)
             
-            # 3. Final score calculation (approximating the average)
             if not weighted_ratios_list:
                 return 0.0
                 
-            # The sum is the numerator of the original final score function
             sum_of_inverse_ratios = get_inverese_ratio(np.array(weighted_ratios_list))
-            
-            # The approximation is: (Sum of Inverse Ratios) / k * (Total Pairs / Total Pairs)
-            # Approx Score = (Sum of Inverse Ratios on k pairs) / k * (Total Pairs / Total Pairs)
-            # To match the original score definition: (Sum of Likelihood-Weighted Ratios) / (Total Pairs)
-            
-            # We estimate the Sum of the Numerator (Sum of Inverse Ratios on ALL pairs)
-            # E[Sum_ALL] = Sum_k * (Total Pairs / k)
-            
-            # Final Approx Score = E[Sum_ALL] / Total Pairs
-            # = (Sum_k * (Total Pairs / k)) / Total Pairs
-            # = Sum_k / k
-            
+            # unbiased estimate of the exact score: sum / k
             return sum_of_inverse_ratios / k
 
-        # --- Execute Row and Column Calculations ---
-        
-        # Row Score (n vectors of dimension m)
         data_array_rows = t.values
         row_rat_score = compute_approx_ratio_score(data_array_rows, self.tau_rat, IsRow=True, k=k_pairs)
 
-        # Column Score (m vectors of dimension n)
         data_array_cols = t.T.values
         col_rat_score = compute_approx_ratio_score(data_array_cols, self.tau_rat, IsRow=False, k=k_pairs)
 
@@ -884,7 +806,6 @@ class ImprovedInsightfulness:
     def calculate_surprising_approx(self, t: pd.DataFrame, threshold: float = 4.0, k_samples: int = 1000, approximate: bool = True):
         n, m = t.shape
         
-        # Existing Helper Functions (omitted for brevity, assume they are accessible)
         def compute_outlier(arr, threshold):
             mean = np.nanmean(arr, axis=1, keepdims=True) 
             std = np.nanstd(arr, axis=1, keepdims=True) 

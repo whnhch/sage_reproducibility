@@ -1,7 +1,6 @@
 #!/bin/bash
-# Step 1: install SAGE in a conda environment, unpack the compressed data and check that it works
-# (no GPU, no token needed).
-# Needs conda. Always builds a new environment SAGE_ENV=<name or path> (default: sage), replacing an old one.
+# Step 1: create the conda environment SAGE_ENV (default: sage; replaced if present), unpack the data, check it.
+# Needs conda; no GPU or token.
 #   bash ARI/install.sh [--llama] [--no-smoke]
 #   --llama     also download Llama-3 (needs hf_token.txt; only for run_optional.sh)
 #   --no-smoke  skip the smoke test

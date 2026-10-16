@@ -1,28 +1,23 @@
 #!/bin/bash
-# Raw results for Fig. 10.
-#   left : BruteForce + PR/PX ablation, k = 4, theta = 0.1, first 5 attributes of
-#          Marketing, Video and House -> result/paper/fig10/{bruteforce,ablation}/...
-#   right: SAGE on Video for k in {5,10,15,20} and theta in {0.0,...,1.0} -> result/paper/fig10/theta/...
-#
-# By default the left plot runs only the variants with the LLM-proxy (-PR, SAGE). Two switches add the rest:
-#   WITH_BF=1        BruteForce bars: about 2.3 h on Marketing, 8 min on Video, 36 min on House (paper runtimes)
-#   WITH_NO_PROXY=1  -PR&PX and -PX bars: Llama on the GPU for every candidate, about 1.5 h on Marketing,
-#                    2 min on Video, 17 min on House
-# Bars of skipped variants are taken from the paper by make_fig10.py and listed in fig10_provenance.csv.
+# Fig. 10 runs -> result/paper/fig10/
+#   left : PR/PX ablation, k 4, theta 0.1, first 5 attributes of Marketing, Video, House
+#   right: SAGE on Video over k and theta
+#   WITH_BF=1        add BruteForce (hours)
+#   WITH_NO_PROXY=1  add -PR&PX and -PX (Llama on the GPU)
+# Skipped bars are filled from the paper (fig10_provenance.csv).
 source "$(dirname "${BASH_SOURCE[0]}")/../experiments_env.sh"
 OUT="$OUT_ROOT/fig10"
 WITH_BF="${WITH_BF:-0}"
 WITH_NO_PROXY="${WITH_NO_PROXY:-0}"
-FIG10_PARTS="${FIG10_PARTS:-left right}"   # e.g. FIG10_PARTS=left to rerun only the ablation bars
+FIG10_PARTS="${FIG10_PARTS:-left right}"
 [ "$WITH_BF" = 1 ] || echo "skipping BruteForce (set WITH_BF=1 to run it)"
 [ "$WITH_NO_PROXY" = 1 ] || echo "skipping -PR&PX and -PX (set WITH_NO_PROXY=1 to run them)"
 
 # ---- left ----
-# Pruning threshold of the ablation: 0.5 for Marketing, 0.3 for Video and House.
 ablation_int_threshold() {
   if [ "$1" = "marketing_data_full" ]; then echo "${ABLATION_INT_THRESHOLD:-0.5}"; else echo "${FIG10_SMALL_INT_THRESHOLD:-0.3}"; fi
 }
-for DS in ${DATASETS:-marketing_data_full Video house}; do   # override with DATASETS="..."
+for DS in ${DATASETS:-marketing_data_full Video house}; do
   [[ " $FIG10_PARTS " == *" left "* ]] || break
   if [ "$WITH_BF" = 1 ]; then
     MAX_COLS=5 DO_PRUNE=false DO_CACHE=false INT_TH=0.0 \
@@ -31,7 +26,7 @@ for DS in ${DATASETS:-marketing_data_full Video house}; do   # override with DAT
   for ITER in $ITERS; do
     for FLAGS in "false false" "false true" "true false" "true true"; do   # -PR&PX, -PR, -PX, SAGE
       set -- $FLAGS
-      [ "$2" = false ] && [ "$WITH_NO_PROXY" != 1 ] && continue   # without the proxy: Llama for every candidate
+      [ "$2" = false ] && [ "$WITH_NO_PROXY" != 1 ] && continue
       MAX_COLS=5 INT_TH="$(ablation_int_threshold "$DS")" DO_PRUNE=$1 DO_CACHE=$2 \
         run_pipeline ./src/models/greedy_basic.py "$DS" 4 0.1 "$OUT/ablation/$DS/$(iter_dir "$ITER")"
     done

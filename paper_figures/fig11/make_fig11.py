@@ -1,14 +1,8 @@
 #!/usr/bin/env python3
-"""Fig. 11 of sage.pdf: SAGE and SAGE+ runtime w.r.t. (left) #tuples and (right) #attributes
-on Marketing and CoverType, k = 5, theta = 0.10, averaged over repetitions.
+"""Fig. 11: SAGE and SAGE+ runtime (every timed stage) vs. #tuples and #attributes on Marketing and CoverType.
 
     python paper_figures/fig11/make_fig11.py                    # values from the paper
     python paper_figures/fig11/make_fig11.py --source results   # recompute from result/
-
-SAGE = src/models/greedy_basic.py (all pruned candidates), SAGE+ = src/models/greedy.py
-(samples 20% of the pruned candidates). x% of tuples -> --data_num x/100; x% of attributes
--> --max_columns round(x/100 * #columns). Runtime = every timed stage of the run
-(pruning + utility + embedding + selection).
 """
 import argparse
 import os

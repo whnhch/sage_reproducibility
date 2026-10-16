@@ -1,31 +1,11 @@
-"""Precompute the T5 query / TAPEX table embeddings of the candidate pivot tables and save them as .npz,
-so a later greedy (or brute-force) selection can load them instead of running the encoders.
-
-Run it after pruning is decided, with the same arguments as the run that will use the embeddings:
+"""T5 / TAPEX embeddings of one configuration's candidates, in run order (used by embedding_bank.py).
 
     python -m src.diversity.embedding_cache --script greedy_basic --filename Video --filepath ./data/ \
         --data_num 0.1 --max_columns 90 --int_threshold 0.5 --do_prune true \
         --transformer_path ~/hf_cache --output_dir precompute/embeddings/
 
-    python -m src.diversity.embedding_cache ... --dry_run true   # only rebuild and list the candidates (no GPU)
-
-It rebuilds the candidate list exactly as the chosen script does before its embedding step:
-  read + preprocess the CSV -> canonical combinations -> prune (src.helper.prune_combinations)
-  -> greedy.py only: seeded 20% sample -> row selection (first rows; bruteforce.py: df.sample)
-  -> SQL text + pivot table (first 100 x 100 cells) per candidate, in the same order.
-It then embeds them with src.diversity.helper.get_all_embeddings and batch size 32, as the runs do.
-Embeddings are mean-pooled over padded batches, so a vector depends slightly on its batch neighbours:
-the saved vectors equal the ones a run computes only for the same candidate list in the same order.
-theta and k do not change that list, so one file serves every theta/k of a configuration.
-
-Output: <output_dir>/<filename>_<script>_dn<data_num>_mc<max_columns>_it<int_threshold>_pr<do_prune>.npz
-  keys   SQL text of each candidate, in run order
-  query  T5 query embeddings      (n x 1024, float32)
-  table  TAPEX table embeddings   (n x 1024, float32)
-  meta   JSON: the arguments above, models, batch size, n, embedding_time_sec (encoding time, so it can
-         be added back to runtimes measured with cached embeddings)
-
-Use in a run:  combined = load_combined(path, sql_queries)  # same matrix as concat_embeddings(...)
+Rebuilds the candidate list as the chosen script does (preprocess, prune, greedy.py's 20% sample, row
+selection) and embeds it like the runs (batch size 32). One file serves every theta and k.
 """
 import argparse
 import json

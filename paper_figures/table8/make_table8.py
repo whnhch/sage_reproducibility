@@ -1,12 +1,8 @@
 #!/usr/bin/env python3
-"""Table 8 of sage.pdf: SAGE / SAGE+ vs. baselines on Marketing, Video, House for k = 3, 5, 10.
+"""Table 8: SAGE / SAGE+ vs. baselines on Marketing, Video, House for k = 3, 5, 10.
 
     python paper_figures/table8/make_table8.py                    # numbers as printed in the paper
     python paper_figures/table8/make_table8.py --source results   # recompute from result/
-
-Raw results come from paper_figures/table8/run_experiments.sh (wraps src/models/greedy*.py,
-llm.py, daisy.py and software.py). Bold = best Util / m-dist in a (k, dataset) block,
-underline = second best.
 """
 import argparse
 import csv
@@ -23,10 +19,7 @@ DATASET_FILE = {"Marketing": "marketing_data_full", "Video": "Video", "House": "
 METHODS = ["Top-k", "DAISY", "LLMs", "PowerBI", "GSheets", "Excel", "SAGE", "SAGE+"]
 COLS = ["n", "T", "ins", "int", "util", "mdist"]
 
-# Where each method's runs live under result/ ({f} = dataset file name).
-#   kind "greedy":   folders written by greedy.py / greedy_basic.py (diversity_result.csv)
-#   kind "software": folders written by software.py (utility_scores.csv + combined_sqrt_cosine_distance.csv);
-#                    each list's k highest-utility tables are scored.
+# Run folders per method under result/ ({f} = dataset): "greedy" = greedy*.py, "software" = software.py.
 RESULT_LOCATIONS = {
     "SAGE":    {"kind": "greedy", "dirs": ["paper/table8/sage/{f}", "greedy/final/{f}"]},
     "SAGE+":   {"kind": "greedy", "dirs": ["paper/table8/sage_plus/{f}", "greedy/sampled/{f}"]},
@@ -57,12 +50,7 @@ def greedy_cell(results_root, loc, dataset, k, theta):
 
 
 def software_cell(results_root, loc, dataset, k):
-    """Score the k highest-utility pivot tables a tool recommended (software.py output).
-
-    software.py writes <out>/utility/<params>/utility_scores.csv and
-    <out>/diversity/<params>/combined_sqrt_cosine_distance.csv; T(s) is not
-    measured there (tools were run by hand), so it always comes from the paper.
-    """
+    """Score a tool's k highest-utility pivot tables (software.py output). T(s) always comes from the paper."""
     f = DATASET_FILE[dataset]
     for rel in result_dirs(loc["dirs"]):
         util_root = os.path.join(results_root, rel.format(k=k), "utility")

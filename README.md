@@ -14,7 +14,7 @@ This package installs SAGE, reruns the experiments of Section 6, and regenerates
 git clone https://github.com/whnhch/sage_reproducibility.git && cd sage_reproducibility
 bash ARI/install.sh            # environment, data, models, checks, smoke test
 bash ARI/run_experiments.sh    # Tables 8-9, Figs. 10-11 and the report
-bash ARI/run_optional.sh --bf  # optional, GPU: BruteForce (also --llama, --gpu; Section 7)
+bash ARI/run_optional.sh --bf  # optional, GPU: BruteForce (also --llama, --gpu, --proxy; Section 7)
 ```
 
 The result is `ARI/out/reproduced_results.pdf`: each reproduced table and figure above the published one, then a plot of every reproduced value against the paper's. The individual PDFs are in `paper_figures/out/`. The default experiments need **no GPU and no Hugging Face token**.
@@ -37,10 +37,7 @@ The result is `ARI/out/reproduced_results.pdf`: each reproduced table and figure
 
 **Paper's machine:** Ubuntu 22.04, 12 CPU cores, 256 GB RAM, NVIDIA H100 (96 GB), CUDA 12.8.
 
-**Default experiments:** Linux, 64 GB RAM, 12 CPU cores (SAGE+ uses 12 worker processes), about 10 GB of disk. No GPU: the model outputs the runs need are shipped:
-* Llama's attribute significance and aggregate ranking: `precompute/*.json`;
-* trend and surprise likelihoods: the LLM-proxy decision trees in `src/prompt_learning/model/`;
-* T5 / TAPEX embeddings of every candidate: `precompute/embeddings/`.
+**Default experiments:** Linux, 64 GB RAM, 12 CPU cores (SAGE+ uses 12 worker processes), about 10 GB of disk. No GPU.
 
 **Optional parts (`ARI/run_optional.sh`):** an NVIDIA GPU with $\geq 24$ GB and 16 GB of disk for Llama.
 
@@ -108,7 +105,7 @@ Shipped inputs produced offline or collected by hand:
 
 | Path | Content | Regenerate with |
 |---|---|---|
-| `src/prompt_learning/model/*_10000_*decision_tree.pkl` | LLM-proxies (§5.1.2) | shipped |
+| `src/prompt_learning/model/*_10000_*decision_tree.pkl` | LLM-proxies (§5.1.2) | `bash ARI/run_optional.sh --proxy` (GPU), below |
 | `precompute/*_interesting_attrs.json`, `*_attribute_aggfunc_ranks.json` | Llama's attribute significance (§3.1.1) and aggregate ranking (§3.2.2) | delete them: runs then ask Llama |
 | `precompute/embeddings/*.npz` | T5 / TAPEX vectors of every candidate | `python -m src.diversity.embedding_bank` (GPU) |
 | `baselines/llm_*.csv`, `baselines/daisy_*.csv`, `daisy.pth` | LLM and DAISY recommendation lists; our DAISY classifier (§6.1.3) | `REGEN_BASELINES=1 bash paper_figures/table8/run_experiments.sh` |
@@ -116,11 +113,18 @@ Shipped inputs produced offline or collected by hand:
 
 **Commercial tools.** Excel, PowerBI and Google Sheets are closed GUI tools. Each dataset was loaded into the tool and its pivot-table recommendations were recorded in order, one per row. Excel: Windows version 2501, built-in recommendations, February 2025. Google Sheets: browser version, suggested pivot tables, February 2025; at most 3 recommendations and none for House. PowerBI: "quick insights" in pivot-table form.
 
+**LLM-proxies.** The shipped correlation, ratio and outlier trees were made with `bash ARI/run_optional.sh --proxy`, which regenerates them per dataset:
+
+1. `src/prompt_learning/generate_dataset.py` asks Llama to label up to 10,000 sampled configs per kind → `result/proxy/data/`.
+2. `src/prompt_learning/train.py` trains one tree per kind $\rightarrow$ `result/proxy/model/`; `accuracy.csv` holds the test accuracies (paper: 90% correlation, 89% ratio, 64% surprise).
+
+The shipped trees in `src/prompt_learning/model/` are kept; rerun the experiments with the new ones with `FORCE=1 PROXY_DIR=result/proxy/model bash ARI/run_experiments.sh`. Llama samples its answers, so new trees differ slightly from the shipped ones. 
+
 ---
 
 ## 5. Experiments
 
-**Setup.** `paper_figures/experiments_env.sh` holds the shared settings (seed 42, $\tau_\rho = 0.8$, $\tau_\pi = 5.0$, per-dataset $\gamma$, row fraction and column cap). Every run goes through `src/models/run_cached.py`, which calls the `src/models/*.py` scripts, loads Llama only if the run uses it, and reads the embeddings from `precompute/embeddings/`.
+**Setup.** `paper_figures/experiments_env.sh` holds the shared settings (seed 42, $\tau_\rho = 0.8$, $\tau_\pi = 5.0$, per-dataset $\gamma$, row fraction and column cap).
 
 **Run.** Each `paper_figures/<item>/run_experiments.sh` loops over the paper's parameter grid. A run writes its results to `result/paper/<item>/<method>/<dataset>/` and a log to `log/paper_*.txt`; the recommended tables are in `diversity/.../selected_queries.json`. A failed run prints `FAILED, see log/...`.
 
@@ -148,10 +152,7 @@ bash ARI/run_experiments.sh --items table8 --datasets Video
 
 SAGE and SAGE+ on Marketing and CoverType, $k = 5$, $\theta = 0.1$. $x\%$ of tuples = the first $x\%$ of rows; $x\%$ of attributes = the first $\mathrm{round}(x/100 \cdot n)$ columns ($n = 28$ for Marketing, $n = 110$ for CoverType).
 
-### 5.4 What to expect
-
-* Runs with the proxy are deterministic for a fixed seed. Runs that call Llama sample its answers and vary slightly.
-* Runtimes depend on the hardware; compare trends, not seconds. With the embedding banks (default) they exclude encoding; `bash ARI/run_optional.sh --gpu` includes it. On Slurm, request `--cpus-per-task=12` for SAGE+.
+Expected differences from the paper: Section 9.
 
 ---
 
@@ -178,14 +179,15 @@ bash ARI/run_experiments.sh --figures-only
 |---|---|---|
 | `ARI/install.sh [--llama] [--no-smoke]` | environment, T5 + TAPEX (+ Llama), checks, smoke test | no |
 | `ARI/run_experiments.sh [options]` | the default experiments, then the tables, figures and report | no |
-| `ARI/run_optional.sh MODE [options]` | `--bf`: BruteForce (Table 9, Fig. 10 left; ~10 h). `--llama`: variants without the proxy, which call Llama (~5 h). `--gpu`: rerun with live T5 / TAPEX encoding | yes |
+| `ARI/run_optional.sh MODE [options]` | `--bf`: BruteForce (Table 9, Fig. 10 left; ~10 h). `--llama`: variants without the proxy, which call Llama (~5 h). `--gpu`: rerun with live T5 / TAPEX encoding. `--proxy`: regenerate the LLM-proxies into `result/proxy/` (Section 4.5) | yes |
 
-Options: `--items table8,table9,fig10,fig11`, `--datasets ...`, `--fig10-parts left|right`, `--iters 0,1,2` (repetitions to average; default one). `run_experiments.sh` also takes `--figures-only` (only draw) and `--paper-text` ($\tau_\rho = 0.5$, $\tau_\pi = 2.0$, pruning threshold $0.5$; writes `result/paper_text/` and `ARI/out/reproduced_results_paper_text.pdf`). `--help` prints all of them.
+Options: `--items table8,table9,fig10,fig11`, `--datasets ...`, `--fig10-parts left|right`, `--iters 0,1,2` (repetitions to average; default one). `run_experiments.sh` also takes `--figures-only` (only draw) and `--paper-text` ($\tau_\rho = 0.5$, $\tau_\pi = 2.0$, pruning threshold $0.5$; writes `result/paper_text/`, `paper_figures/out_paper_text/` and `ARI/out/reproduced_results_paper_text.pdf`; first build its embedding banks on a GPU with `PARAMS=paper_text python -m src.diversity.embedding_bank`). `--help` prints all of them.
 
 ```bash
 bash ARI/run_experiments.sh --items fig11 --datasets covertype_expanded
 bash ARI/run_optional.sh --llama --items table9
 bash ARI/run_optional.sh --bf --llama --gpu
+bash ARI/run_optional.sh --proxy --datasets Video
 ```
 
 ---
@@ -198,16 +200,18 @@ sage_reproducibility/
 ├── ARI/                          reproducibility scripts
 │   ├── install.sh                step 1: environment, models, checks
 │   ├── run_experiments.sh        step 2: default experiments, figures, report
-│   ├── run_optional.sh           optional GPU experiments (BruteForce, Llama, live encoding)
+│   ├── run_optional.sh           optional GPU experiments (BruteForce, Llama, live encoding, LLM-proxies)
 │   ├── env/                      environment.yml, requirements.txt
 │   ├── scripts/                  common.sh, unpack_data.py, fetch_models.py, check_install.py, smoke_test.sh,
 │   │                             make_report.py
 │   └── out/                      reproduced_results.pdf
 ├── paper_figures/                one folder per table / figure
+│   ├── README.md                 details of each table / figure
 │   ├── run_all.sh, build_all.sh, experiments_env.sh, common.py
 │   ├── table8/ table9/ fig10/ fig11/
 │   │                             run_experiments.sh, make_<item>.py, paper_values.json
-│   └── out/                      <item>.pdf, <item>_provenance.csv
+│   ├── out/                      <item>.pdf, <item>_provenance.csv
+│   └── out_paper_text/           the same, with --paper-text
 ├── src/
 │   ├── models/                   greedy_basic.py (SAGE), greedy.py (SAGE+), bruteforce.py,
 │   │                             software.py (scores a baseline list), llm.py, daisy.py,
@@ -215,17 +219,35 @@ sage_reproducibility/
 │   ├── utility/                  insightfulness.py (§3.1), interpretability.py (§3.2), utility.py (§3.3),
 │   │                             llama.py, prompts/
 │   ├── diversity/                helper.py (embeddings, distance, greedy selection; §4, §5.2),
-│   │                             embedding_bank.py
-│   ├── prompt_learning/model/    LLM-proxy decision trees (§5.1.2)
+│   │                             embedding_bank.py, embedding_cache.py (precomputed embeddings)
+│   ├── prompt_learning/          LLM-proxies (§5.1.2): model/ (the trees), generate_dataset.py,
+│   │                             train.py, proxy.py, regen_proxies.sh
 │   ├── helper.py                 pruning (§5.1.1), shared helpers
 │   ├── generate_table.py         candidate pivot tables
-│   └── preprocessing.py
+│   ├── preprocessing.py
+│   └── config.py                 prompt paths
 ├── precompute/
 │   ├── <dataset>_*.json          Llama's attribute significance and aggregate ranking
 │   └── embeddings/               T5 / TAPEX embedding banks
 ├── baselines/                    DAISY, LLM, Excel, PowerBI, Google Sheets recommendation lists
 ├── daisy.pth                     our DAISY classifier
+├── hf_token.txt                  Hugging Face token (empty; optional parts only)
 ├── data/                         marketing_data_full.csv, Video.csv, house.csv, covertype_expanded.csv.gz
-├── result/paper/                 run outputs (created by the experiments)
+├── result/                       created by the runs: paper/ (experiments), paper_text/ (--paper-text),
+│                                 proxy/ (--proxy)
 └── log/                          run logs
 ```
+
+---
+
+## 9. Disclaimer: expected gaps
+
+**Utility.** Ins, Int and Util can differ slightly from the paper:
+* Llama samples its answers (temperature 0.6). Runs that call Llama, regenerated LLM-proxies, `precompute/*.json` and the LLM / DAISY baselines therefore vary between runs.
+* The LLM-proxy trees are trained on a random 80/20 split and break ties between equally good splits at random. A retrained tree, and the likelihoods it gives, can differ from the shipped one.
+
+With the shipped trees and precomputed inputs (the default), runs are deterministic for a fixed seed.
+
+**Runtime.** T(s) and the runtimes of Table 9 and Figs. 10–11 depend on the hardware.
+* SAGE+ computes utilities in 12 worker processes. With fewer cores it slows down and its speedup over SAGE shrinks.
+* With the embedding banks (default), runtimes exclude encoding; `bash ARI/run_optional.sh --gpu` includes it.

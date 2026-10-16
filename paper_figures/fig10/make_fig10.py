@@ -1,14 +1,10 @@
 #!/usr/bin/env python3
-"""Fig. 10 of sage.pdf.
-  (Left)  runtime of BruteForce and the PR/PX ablation variants, k = 4, theta = 0.1, 5 attributes.
-  (Right) Utility vs. diversity threshold theta on Video for k = 5, 10, 15, 20.
+"""Fig. 10: (left) online runtime of BruteForce and the PR/PX ablation; (right) utility vs. theta on Video.
 
     python paper_figures/fig10/make_fig10.py                    # values from the paper
     python paper_figures/fig10/make_fig10.py --source results   # recompute from result/
 
-Left-panel runtime is the online phase (utility + embedding + selection), like Table 9.
-The right panel has no printed labels in the paper; paper_values.json holds values
-digitized from the plot (about +/- 0.1).
+Right-panel paper values are digitized from the plot (about +/- 0.1).
 """
 import argparse
 import os

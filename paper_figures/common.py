@@ -1,15 +1,5 @@
-"""Shared helpers for rebuilding Table 8, Table 9, Fig. 10 and Fig. 11 of sage.pdf.
-
-Two jobs:
-  1. Read the run folders written by src/models/*.py (greedy.py, greedy_basic.py,
-     bruteforce.py, software.py, ...) and turn one run into the metrics the paper
-     reports (#PT, T(s), Ins, Int, Util, m-dist, distance matrix).
-  2. Write a standalone LaTeX file (Libertine + booktabs/pgfplots, like the paper)
-     and compile it to PDF with pdflatex.
-
-Only the Python standard library is used, so the scripts run without the
-experiment environment (torch/transformers are not needed to render).
-"""
+"""Shared helpers for Tables 8-9 and Figs. 10-11: read run folders into the paper's metrics, compile LaTeX.
+Standard library only."""
 import ast
 import csv
 import glob
@@ -152,13 +142,8 @@ def read_matrix(path):
 
 
 def run_metrics(div_dir):
-    """Metrics of one run (the numbers a single row of Table 8 reports).
-
-    T = pruning + utility + embedding + selection time (every stage the run timed);
-    T_online drops pruning, which the paper counts as offline (Section 6.2).
-    Util/Ins/Int are sums over the selected pivot tables
-    (utility = (Ins + Int) / 2 per table, see src/utility/utility.py).
-    """
+    """Metrics of one run. T = every timed stage; T_online drops pruning (offline, Section 6.2).
+    Util / Ins / Int are sums over the selected pivot tables."""
     name = os.path.basename(div_dir)
     stage_root = os.path.dirname(os.path.dirname(div_dir))
     prune_dir = os.path.join(stage_root, "prune", name)
@@ -235,9 +220,8 @@ class Provenance:
         self.rows = []
 
     def add(self, cell, source, detail="", value=None, paper=None, metric="", group=""):
-        """value/paper: the number drawn and the number printed in the paper for this cell, so
-        ARI/scripts/make_report.py can plot one against the other; metric picks the panel and
-        group (usually the dataset) the color."""
+        """value / paper: drawn and printed numbers of this cell; metric and group set make_report.py's panel
+        and color."""
         self.rows.append((cell, source, detail, "" if value is None else value,
                           "" if paper is None else paper, metric, group))
 

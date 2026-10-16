@@ -1,28 +1,18 @@
 """Run greedy_basic.py, greedy.py, bruteforce.py or software.py without loading models they do not use.
 
-    python -m src.models.run_cached greedy_basic [--embeddings bank|live] [--bank_dir DIR] <the script's own arguments>
+    python -m src.models.run_cached greedy_basic [--embeddings bank|live] [--bank_dir DIR] [--clf_rat_path PKL]
+        <the script's own arguments>
 
-The script itself is imported unchanged and its own main() is called; only these names in its namespace are
-replaced for the run:
-  Llama3            loaded on first use. With the LLM-proxy (--do_cache true) and the precomputed answers in
-                    precompute/, Llama is never called, so it is never loaded. It is loaded when a run
-                    calls it: --do_cache false (No PX, No PR/PX), bruteforce.py, or a missing precompute file.
-  load_encoders,    --embeddings bank (default): the T5 / TAPEX vectors are read from the embedding banks in
-  compute_and_      precompute/embeddings/ (src/diversity/embedding_bank.py), which return exactly the vectors
-  concat_embeddings the run would compute, so the encoders are not loaded. If a vector is missing, the encoders
-  _with_timing      are loaded and the embeddings computed as usual. --embeddings live always computes them.
-                    software.py (baseline lists) always computes them; its lists are not in the banks.
-  set_environment   reads the Hugging Face token only if the file is not empty (it is only needed to download
-                    Llama) and does not print it.
-So a default run (LLM-proxy on, banks present) needs no GPU and no Hugging Face token.
-
-One fix is applied to the scoring code, also without changing it (see score_as_number below): for a pivot table
-with a single row or column, NaiveInsightfulness returns the correlation / ratio score as the list [0]. Compared
-with NumPy numbers that works, but for a 1 x 1 table the informativeness is a plain float and max() raises
-TypeError. The scores are returned as 0.0 instead, which gives the same values wherever the original code runs.
-
-Timing: with --embeddings bank, embedding_time.csv records the time to read the vectors, not to encode them,
-so runtimes exclude encoding. Use --embeddings live (GPU) when runtimes should include it.
+The script is imported unchanged; these names in it are replaced:
+  Llama3            loaded on first use, so runs with the LLM-proxy never load it.
+  load_encoders,    --embeddings bank (default): T5 / TAPEX vectors come from precompute/embeddings/
+  compute_and_      (src/diversity/embedding_bank.py), so runtimes exclude encoding; the encoders load only if a
+  concat_embeddings vector is missing. --embeddings live, and software.py, always encode.
+  _with_timing
+  set_environment   reads the Hugging Face token only if present, without printing it.
+  load_classifiers  with --clf_rat_path: --clf_trd_path is the correlation tree, combined with the ratio tree
+                    (src/prompt_learning/proxy.py).
+score_as_number returns NaiveInsightfulness's [0] scores as 0.0, so max() does not fail on 1 x 1 tables.
 """
 import csv
 import importlib
@@ -34,7 +24,7 @@ SCRIPTS = ("greedy_basic", "greedy", "bruteforce", "software")
 
 
 def score_as_number(method):
-    """Wrap a NaiveInsightfulness score method so a [0] result becomes 0.0 (see the module docstring)."""
+    """Wrap a NaiveInsightfulness score method so a [0] result becomes 0.0."""
     def wrapped(self, *args, **kwargs):
         value = method(self, *args, **kwargs)
         return float(value[0]) if isinstance(value, list) and len(value) == 1 else value
@@ -51,7 +41,7 @@ def patch_scoring():
             setattr(cls, name, score_as_number(method))
 
 
-# At import time, so SAGE+'s worker processes (multiprocessing "spawn" re-imports this module) get it too.
+# At import time, so SAGE+'s spawned workers get it too.
 patch_scoring()
 
 
@@ -126,18 +116,20 @@ def main():
     argv = sys.argv[1:]
     if not argv or argv[0] not in SCRIPTS:
         sys.exit(f"usage: python -m src.models.run_cached {{{','.join(SCRIPTS)}}} [--embeddings bank|live] "
-                 "[--bank_dir DIR] <script arguments>")
+                 "[--bank_dir DIR] [--clf_rat_path PKL] <script arguments>")
     script, rest = argv[0], argv[1:]
-    mode, bank_dir = "bank", "precompute/embeddings/"
-    for opt in ("--embeddings", "--bank_dir"):
+    mode, bank_dir, rat_path = "bank", "precompute/embeddings/", None
+    for opt in ("--embeddings", "--bank_dir", "--clf_rat_path"):
         if opt in rest:
             i = rest.index(opt)
             value = rest[i + 1]
             del rest[i:i + 2]
             if opt == "--embeddings":
                 mode = value
-            else:
+            elif opt == "--bank_dir":
                 bank_dir = value
+            else:
+                rat_path = value
     if mode not in ("bank", "live"):
         sys.exit("--embeddings must be bank or live")
 
@@ -145,6 +137,24 @@ def main():
     LazyLlama.real_class = module.Llama3
     module.Llama3 = LazyLlama
     module.set_environment = set_environment
+    if rat_path:
+        import joblib
+        from src.prompt_learning.proxy import TrendProxy
+        real_load_classifiers = module.load_classifiers
+
+        def load_classifiers(clf_trd_path, clf_out_path):
+            clf_cor, clf_out = real_load_classifiers(clf_trd_path, clf_out_path)
+            print(f"[run_cached] LLM-proxies: correlation {clf_trd_path}, ratio {rat_path}, outlier {clf_out_path}",
+                  flush=True)
+            return TrendProxy(clf_cor, joblib.load(rat_path)), clf_out
+        module.load_classifiers = load_classifiers
+    elif hasattr(module, "load_classifiers"):
+        real_load_classifiers = module.load_classifiers
+
+        def load_classifiers(clf_trd_path, clf_out_path):
+            print(f"[run_cached] LLM-proxies: trend {clf_trd_path}, outlier {clf_out_path}", flush=True)
+            return real_load_classifiers(clf_trd_path, clf_out_path)
+        module.load_classifiers = load_classifiers
     if mode == "bank" and script != "software":
         real_load_encoders = module.load_encoders
         module.load_encoders = lambda *a, **k: (None, None, None, None)  # loaded only if the bank misses

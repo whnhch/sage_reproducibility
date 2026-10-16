@@ -1,13 +1,7 @@
 #!/bin/bash
-# Run the experiments for Table 8, Table 9, Fig. 10, Fig. 11 and then build all four PDFs
-# from the new results.
-#
-#   bash paper_figures/run_all.sh                  # everything
-#   bash paper_figures/run_all.sh fig11 table8     # only these artifacts (in this order)
-#
-# Settings from experiments_env.sh can be overridden here too, e.g.
-#   TRANSFORMER_PATH=~/hf_cache ITERS="0" bash paper_figures/run_all.sh
-# Each artifact's console output is saved to log/paper_run_<item>.txt.
+# Run the experiments for the given items (default: table8 table9 fig10 fig11), then build their PDFs.
+#   bash paper_figures/run_all.sh [ITEM...]
+# Logs: log/paper_run_<item>.txt
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(dirname "$HERE")"
 cd "$ROOT_DIR" || exit 1
@@ -31,12 +25,12 @@ for item in "${ITEMS[@]}"; do
     echo "===== $item exited with an error, see log/paper_run_${RUN_TAG}${item}.txt =====" >&2
     failed+=("$item")
   fi
-  # individual runs that fail are reported as "FAILED, see log/..." without stopping the loop
+  # failed single runs
   grep -h "FAILED" "log/paper_run_${RUN_TAG}${item}.txt" >&2 && failed+=("$item (some runs)")
 done
 
-latex_ok=1  # drawing needs pdflatex with these packages; skip it (not an error) where they are missing
-[ "${SKIP_PDFS:-0}" = 1 ] && latex_ok=skip   # ARI/run_experiments.sh draws everything itself afterwards
+latex_ok=1
+[ "${SKIP_PDFS:-0}" = 1 ] && latex_ok=skip   # ARI/run_experiments.sh draws afterwards
 command -v pdflatex >/dev/null 2>&1 || latex_ok=0
 for f in standalone.cls libertine.sty newtxmath.sty pgfplots.sty; do
   command -v kpsewhich >/dev/null 2>&1 && [ -z "$(kpsewhich "$f")" ] && latex_ok=0
