@@ -248,6 +248,8 @@ sage_reproducibility/
 
 With the shipped trees and precomputed inputs (the default), runs are deterministic for a fixed seed.
 
+**SAGE+ on Video.** Video's pruned candidate set is small, so SAGE+ keeps all of it instead of sampling $\max(50, 20\%)$ (`src/models/greedy.py`). The paper does not mention this.
+
 **Runtime.** T(s) and the runtimes of Table 9 and Figs. 10–11 depend on the hardware.
 * SAGE+ computes utilities in 12 worker processes. With fewer cores it slows down and its speedup over SAGE shrinks.
 * With the embedding banks (default), runtimes exclude encoding; `bash ARI/run_optional.sh --gpu` includes it.
