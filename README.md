@@ -8,6 +8,50 @@ This package installs SAGE, reruns the experiments of Section 6, and regenerates
 
 ---
 
+## 0. Disclaimer: expected gaps
+
+**Utility.** Ins, Int and Util can differ slightly from the paper:
+* `precompute/*.json` (attribute significance, aggregate ranking) and the LLM /
+  DAISY baselines were generated with Llama sampling its answers (temperature
+  0.6), as do the optional runs that call Llama; regenerating them gives
+  different values. The LLM-proxy labels are decoded greedily
+  (`src/prompt_learning/generate_dataset.py`), so `--proxy` regenerates the same
+  labels.
+* The LLM-proxy trees are trained on a random 80/20 split and break ties between
+  equally good splits at random. A retrained tree, and the likelihoods it gives,
+  can differ from the shipped one.
+
+With the shipped trees and precomputed inputs (the default), runs are deterministic for a fixed seed.
+
+**Video.** Video's results are sensitive to its candidate set, for two reasons.
+* Structure: Video has few attributes. Of its 11 columns, 7 are marked
+  interesting (`precompute/Video_interesting_attrs.json`; Marketing has 17,
+  House 12), and 4 of the 7 are similar sales measures (NA, EU, JP and Global
+  sales). Video therefore has few candidates (2,145 combinations, 36 after
+  pruning; Marketing has 43,848), and few of them are far apart.
+* Llama's ranking: pruning keeps each attribute's top-ranked aggregation
+  functions from `precompute/Video_attribute_aggfunc_ranks.json`. With so few
+  attributes, each attribute's ranking decides a large share of the candidates:
+  re-ranking 3 attributes replaces 19 of the 36.
+  
+With the shipped ranking, no 5 candidates are at least 0.30 apart, so Table 8
+uses $\theta = 0.20$ for Video at $k = 5$ (Section 5.1), and SAGE's Video
+utilities at $k = 3$ and $5$ are lower than the paper's; at these two $k$, DAISY
+scores slightly higher than SAGE on Video (SAGE still beats every other
+baseline, and all of them at $k = 10$). Top-k, which does not depend on
+$\theta$, matches the paper. Marketing and House, with more attributes and
+candidates, are not sensitive in this way, and SAGE beats every baseline on both
+at every $k$.
+
+**Runtime.** T(s) and the runtimes of Table 9 and Figs. 10–11 depend on the
+hardware.
+* SAGE+ computes utilities in 12 worker processes. With fewer cores it slows
+  down and its speedup over SAGE shrinks.
+* With the embedding banks (default), runtimes exclude encoding; `bash
+  ARI/run_optional.sh --gpu` includes it.
+
+---
+
 ## 1. Quick start
 
 ```bash
@@ -139,12 +183,14 @@ bash ARI/run_experiments.sh --items table8 --datasets Video
 ### 5.1 Table 8
 
 * Marketing, Video, House; $k \in \lbrace 3, 5, 10 \rbrace$; $\theta = 0.30$ (Marketing, Video) or $0.20$ (House), and $0.10$ for $k = 10$.
+* Rows: Marketing and House use all rows. Video uses a random 10% (`random_state=42`) in every run (SAGE, SAGE+, Top-k, the baselines and BruteForce, here and in Fig. 10 left), since `data/Video.csv` is sorted by sales.
+* Exception: Video at $k = 5$ uses $\theta = 0.20$ (paper: $0.30$). With the shipped `precompute/Video_attribute_aggfunc_ranks.json`, no 5 of Video's 36 candidates are at least 0.30 apart (checked over all 376,992 sets), so SAGE and SAGE+ would return 4 tables.
 * SAGE = `greedy_basic.py`; SAGE+ = `greedy.py` (samples $\max(50, 20\%)$ of the pruned candidates, 12 workers); Top-k = `greedy_basic.py` with $\theta = 0$.
-* Baselines: each list's k highest-utility tables, scored by `software.py` (PowerBI on House: 10% of the rows). Their T(s) was measured by hand and is taken from the paper.
+* Baselines: each list's k highest-utility tables, scored by `software.py` (PowerBI on House: 10% of the rows). Google Sheets has no House list, so its House cells are empty, as in the paper. Their T(s) was measured by hand and is taken from the paper.
 
 ### 5.2 Table 9 and Fig. 10
 
-* Table 9: Marketing, first 5 attributes, $\theta = 0.1$, $k \in \lbrace 2, 5 \rbrace$. Fig. 10 left: the same variants, $k = 4$, on Marketing, Video and House. Fig. 10 right: SAGE on Video, $k \in \lbrace 5, 10, 15, 20 \rbrace$, $\theta \in \lbrace 0.0, \dots, 1.0 \rbrace$.
+* Table 9: Marketing, first 5 attributes, $\theta = 0.1$, $k \in \lbrace 2, 5 \rbrace$. Fig. 10 left: the same variants, $k = 4$, on Marketing, Video and House. Fig. 10 right: SAGE on Video, $k \in \lbrace 5, 10, 15, 20 \rbrace$, $\theta \in \lbrace 0.0, \dots, 1.0 \rbrace$, on all of Video's rows (as in the paper's runs for this figure; Table 8 uses 10%). Its curves can differ from the paper's for the reason in Section 0 (Video).
 * Pruning threshold of the ablation: 0.5 for Marketing, 0.3 for Video and House.
 * By default only the proxy variants run (No PR, SAGE). `bash ARI/run_optional.sh --bf` adds BruteForce and `--llama` adds No PR/PX and No PX. Skipped cells show the paper's values.
 
@@ -152,7 +198,7 @@ bash ARI/run_experiments.sh --items table8 --datasets Video
 
 SAGE and SAGE+ on Marketing and CoverType, $k = 5$, $\theta = 0.1$. $x\%$ of tuples = the first $x\%$ of rows; $x\%$ of attributes = the first $\mathrm{round}(x/100 \cdot n)$ columns ($n = 28$ for Marketing, $n = 110$ for CoverType).
 
-Expected differences from the paper: Section 9.
+Expected differences from the paper: Section 0.
 
 ---
 
@@ -239,15 +285,3 @@ sage_reproducibility/
 ```
 
 ---
-
-## 9. Disclaimer: expected gaps
-
-**Utility.** Ins, Int and Util can differ slightly from the paper:
-* Llama samples its answers (temperature 0.6). Runs that call Llama, regenerated LLM-proxies, `precompute/*.json` and the LLM / DAISY baselines therefore vary between runs.
-* The LLM-proxy trees are trained on a random 80/20 split and break ties between equally good splits at random. A retrained tree, and the likelihoods it gives, can differ from the shipped one.
-
-With the shipped trees and precomputed inputs (the default), runs are deterministic for a fixed seed.
-
-**Runtime.** T(s) and the runtimes of Table 9 and Figs. 10–11 depend on the hardware.
-* SAGE+ computes utilities in 12 worker processes. With fewer cores it slows down and its speedup over SAGE shrinks.
-* With the embedding banks (default), runtimes exclude encoding; `bash ARI/run_optional.sh --gpu` includes it.

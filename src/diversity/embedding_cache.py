@@ -111,7 +111,7 @@ def candidate_inputs(args, prune_dir, df_full=None):
         n_pts = max(50, int(len(pruned) * frac))
         pruned = random.sample(pruned, min(len(pruned), n_pts))
 
-    if args.script == "bruteforce":  # bruteforce.py samples rows; the greedy scripts take the first rows
+    if args.script == "bruteforce" or (args.filename == "Video" and args.data_num <= 1):
         if args.data_num <= 1:
             df = df.sample(frac=args.data_num, random_state=42).reset_index(drop=True)
         else:

@@ -3,6 +3,7 @@
     python -m src.prompt_learning.generate_dataset --dataset Video --max_columns 90 --out_dir result/proxy/data
 
 Writes <out_dir>/<dataset>_<kind>.jsonl, one config per line; label is null if Llama gave none. Reruns resume.
+Llama decodes greedily (do_sample=False); --sample samples them instead.
 """
 import argparse
 import json
@@ -108,7 +109,19 @@ def build_prompt(config: dict, kind: str) -> str:
     return PROMPT.format(instruction=instruction)
 
 
-def label_configs(configs: list, kind: str, llm, out_path: str, batch_size: int = 64):
+def ask(llm, prompts: list, greedy: bool = True) -> list:
+    """Llama's responses: greedy decoding with Llama3's chat template, or Llama3.chatbot's sampling."""
+    if not greedy:
+        return llm.chatbot(prompts)
+    texts = [llm.pipeline.tokenizer.apply_chat_template(
+                 [{"role": "system", "content": ""}, {"role": "user", "content": p}],
+                 tokenize=False, add_generation_prompt=True) for p in prompts]
+    outputs = llm.pipeline(texts, max_new_tokens=4096, do_sample=False, temperature=None, top_p=None,
+                           pad_token_id=llm.pipeline.tokenizer.eos_token_id)
+    return [out[0]["generated_text"][len(t):] for out, t in zip(outputs, texts)]
+
+
+def label_configs(configs: list, kind: str, llm, out_path: str, batch_size: int = 64, greedy: bool = True):
     """Ask Llama about every config not yet in out_path, appending each batch as it finishes."""
     done = set()
     if os.path.exists(out_path):
@@ -119,7 +132,7 @@ def label_configs(configs: list, kind: str, llm, out_path: str, batch_size: int 
 
     for start in range(0, len(todo), batch_size):
         batch = todo[start:start + batch_size]
-        responses = llm.chatbot([build_prompt(c, kind) for c in batch])
+        responses = ask(llm, [build_prompt(c, kind) for c in batch], greedy)
         with open(out_path, 'a') as f:
             for config, response in zip(batch, responses):
                 f.write(json.dumps({**config, 'label': llm.find_value_in_response(response, 'likelihood')}) + '\n')
@@ -137,6 +150,7 @@ def main():
     parser.add_argument('--n', type=int, default=10000, help='configs to label per kind')
     parser.add_argument('--seed', type=int, default=42)
     parser.add_argument('--batch_size', type=int, default=64)
+    parser.add_argument('--sample', action='store_true', help="sample Llama's answers instead of greedy decoding")
     parser.add_argument('--out_dir', default='result/proxy/data')
     parser.add_argument('--transformer_path', default=os.path.expanduser('~/.cache/huggingface'))
     parser.add_argument('--hf_token_path', default='./hf_token.txt')
@@ -163,7 +177,8 @@ def main():
         heads, tails = config_space(df, interesting_attrs, kind)
         print(f"[{kind}] {args.dataset}: {len(heads) * len(tails):,} possible configs", flush=True)
         configs = sample_configs(heads, tails, kind, args.n, args.seed)
-        label_configs(configs, kind, llm, os.path.join(args.out_dir, f"{args.dataset}_{kind}.jsonl"), args.batch_size)
+        label_configs(configs, kind, llm, os.path.join(args.out_dir, f"{args.dataset}_{kind}.jsonl"), args.batch_size,
+                      greedy=not args.sample)
 
 
 if __name__ == '__main__':

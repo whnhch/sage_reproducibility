@@ -78,7 +78,7 @@ def collect_results(paper, root, prov):
                 base = os.path.join(root, rel)
                 if not os.path.isdir(base):
                     continue
-                dirs = find_runs(base, filename="Video", k=int(k), threshold=th)
+                dirs = find_runs(base, filename="Video", k=int(k), threshold=th, data_num=1.0)  # all rows
                 if dirs:
                     got = average_runs(dirs)
                     break

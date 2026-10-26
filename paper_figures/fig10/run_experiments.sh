@@ -33,11 +33,11 @@ for DS in ${DATASETS:-marketing_data_full Video house}; do
   done
 done
 
-# ---- right ----
+# ---- right ---- 
 for K in 5 10 15 20; do
   [[ " $FIG10_PARTS " == *" right "* ]] || break
   for TH in 0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0; do
-    run_pipeline ./src/models/greedy_basic.py Video "$K" "$TH" "$OUT/theta/Video/"
+    DATA_NUM=1.0 run_pipeline ./src/models/greedy_basic.py Video "$K" "$TH" "$OUT/theta/Video/"
   done
 done
 

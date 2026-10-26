@@ -6,7 +6,7 @@ OUT="$OUT_ROOT/table8"
 
 DATASETS="${DATASETS:-marketing_data_full Video house}"   # override, e.g. DATASETS="Video"
 theta_for() {  # theta for (dataset, k)
-  if [ "$2" = "10" ]; then echo 0.1; elif [ "$1" = "house" ]; then echo 0.2; else echo 0.3; fi
+  if [ "$2" = "10" ]; then echo 0.1; elif [ "$1" = "house" ] || { [ "$1" = "Video" ] && [ "$2" = "5" ]; }; then echo 0.2; else echo 0.3; fi
 }
 
 for ITER in $ITERS; do

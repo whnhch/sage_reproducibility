@@ -65,7 +65,7 @@ def main():
 
     clf = make_pipeline(
         ColumnTransformer([('cat', OneHotEncoder(handle_unknown='ignore'), FEATURES[args.kind][1])]),
-        DecisionTreeClassifier(criterion='gini', max_depth=15, min_samples_leaf=75, random_state=42),
+        DecisionTreeClassifier(criterion='gini', max_depth=15, random_state=42),
     )
     clf.fit(X_train, y_train)
 

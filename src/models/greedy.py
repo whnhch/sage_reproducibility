@@ -135,12 +135,10 @@ def main(args):
         pruned_result = pruned_result_
     if not args.do_int_cache: concise_cache, semantics_cache = None, None
 
-    # let's use the fraction of the df
-    # if args.data_num <= 1:
-    #         df = df.sample(frac=args.data_num, random_state=42).reset_index(drop=True)
-    # else:
     #     df = df.sample(n=int(args.data_num), random_state=42).reset_index(drop=True)
-    if args.data_num <= 1:
+    if args.filename == "Video" and args.data_num <= 1:
+        df = df.sample(frac=args.data_num, random_state=42).reset_index(drop=True)
+    elif args.data_num <= 1:
         df = df.iloc[:int(len(df) * args.data_num)].reset_index(drop=True)
     else:
         df = df.iloc[:int(args.data_num)].reset_index(drop=True)

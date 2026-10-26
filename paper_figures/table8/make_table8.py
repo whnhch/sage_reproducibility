@@ -31,6 +31,8 @@ RESULT_LOCATIONS = {
     "GSheets": {"kind": "software", "dirs": ["paper/table8/gsheets", "gsheets/result"]},
     "Excel":   {"kind": "software", "dirs": ["paper/table8/excel", "excel/result"]},
 }
+# theta of the runs where it differs from the paper's (run_experiments.sh::theta_for, README §5.1)
+RUN_THETA = {(5, "Video"): 0.2}
 
 
 # --------------------------------------------------------------------------- #
@@ -97,7 +99,7 @@ def collect_results(paper, results_root, prov):
             loc = RESULT_LOCATIONS.get(method)
             for ds in paper["datasets"]:
                 paper_row = per_ds.get(ds)
-                theta = block["theta"][ds]
+                theta = RUN_THETA.get((k, ds), block["theta"][ds])
                 got = None
                 if loc and paper_row is not None:
                     if loc["kind"] == "greedy":
@@ -188,7 +190,7 @@ def method_label(m):
     return m
 
 
-def build_tex(paper, table, caption=True):
+def build_tex(paper, table, caption=True, note=""):
     ds_list = paper["datasets"]
     lines = []
     lines.append("\\begin{minipage}{\\linewidth}\\centering\\footnotesize\\setlength{\\tabcolsep}{2.6pt}")
@@ -228,7 +230,7 @@ def build_tex(paper, table, caption=True):
     lines.append("\\end{tabular}")
     if caption:
         lines.append("\\par\\vspace{6pt}\\raggedright\\small\\setlength{\\parindent}{0pt}")
-        lines.append(CAPTION)
+        lines.append(CAPTION + note)
     lines.append("\\end{minipage}")
     width = "17.5cm"
     return f"\\begin{{minipage}}{{{width}}}\n" + "\n".join(lines) + "\n\\end{minipage}"
@@ -259,7 +261,9 @@ def main():
         table = collect_results(paper, args.results, prov)
     else:
         table = collect_paper(paper, prov)
-    body = build_tex(paper, table, caption=not args.no_caption)
+    note = (r" Reproduction: $\theta=0.20$ on Video for $k=5$ (no 5 of its candidates are 0.30 apart)."
+            if args.source == "results" else "")
+    body = build_tex(paper, table, caption=not args.no_caption, note=note)
     compile_tex(body, "table8", args.out, args.keep_tex)
     prov.report(args.out)
 

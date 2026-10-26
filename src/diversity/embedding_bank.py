@@ -50,6 +50,7 @@ def paper_plan(params=None):
         add("bruteforce", ds, dn, 5, 0.0, False)    # Table 9, Fig. 10 left
         add("greedy_basic", ds, dn, 5, ablation[ds], False)  # -PR&PX, -PR
         add("greedy_basic", ds, dn, 5, ablation[ds], True)   # -PX, SAGE
+    add("greedy_basic", "Video", 1.0, defaults["Video"][1], defaults["Video"][2], True)  # Fig. 10 right: all rows
     for ds, n_cols in (("marketing_data_full", 28), ("covertype_expanded", 110)):  # Fig. 11
         _, mc, it = defaults[ds]
         for script in ("greedy_basic", "greedy"):
@@ -60,8 +61,10 @@ def paper_plan(params=None):
     return list(unique.values())
 
 
-def rows_of(script):
-    return "sample" if script == "bruteforce" else "head"
+def rows_of(script, filename=None, data_num=1.0):
+    """Row selection of a run: bruteforce.py samples; the greedy scripts take the first rows, except on Video."""
+    sample = script == "bruteforce" or (filename == "Video" and data_num <= 1)
+    return "sample" if sample else "head"
 
 
 def bank_name(filename, rows, data_num):
@@ -70,7 +73,7 @@ def bank_name(filename, rows, data_num):
 
 def bank_path(args, script, output_dir="precompute/embeddings/"):
     """Bank file a run with these args (filename, data_num) uses."""
-    return os.path.join(output_dir, bank_name(args.filename, rows_of(script), args.data_num))
+    return os.path.join(output_dir, bank_name(args.filename, rows_of(script, args.filename, args.data_num), args.data_num))
 
 
 def config_args(cfg, filepath):
@@ -307,7 +310,7 @@ def main(argv=None):
         df_full = ec.load_dataframe("./data/", ds)
         groups = defaultdict(list)
         for c in configs:
-            groups[(rows_of(c["script"]), c["data_num"])].append(c)
+            groups[(rows_of(c["script"], ds, c["data_num"]), c["data_num"])].append(c)
         for (rows, dn), cfgs in sorted(groups.items()):
             path = os.path.join(args.output_dir, bank_name(ds, rows, dn))
             print(f"-- {path} ({len(cfgs)} configurations)")
