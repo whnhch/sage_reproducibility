@@ -1,0 +1,26 @@
+# Never bake the Hugging Face token into the image; mount it at run time
+hf_token.txt
+
+.git
+.DS_Store
+._*
+.vscode/
+.idea/
+__pycache__/
+*.py[cod]
+
+# Generated outputs
+result/
+log/
+ARI/out/
+paper_figures/out/
+paper_figures/out_paper_text/
+embedding_distances/
+
+# Unpacked inside the image from data/covertype_expanded.csv.gz
+data/covertype_expanded.csv
+
+README.html
+README_files/
+Dockerfile
+.dockerignore
