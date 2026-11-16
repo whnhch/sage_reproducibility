@@ -134,7 +134,8 @@ def check_hf(online):
         report("FAIL", "huggingface_hub", "not installed")
         return
     for m in MODELS:
-        hit = try_to_load_from_cache(m, "config.json", cache_dir=os.path.join(cache, "hub"))
+        # where fetch_models.py puts them and the runs look (TRANSFORMERS_CACHE = TRANSFORMER_PATH, no hub/)
+        hit = try_to_load_from_cache(m, "config.json", cache_dir=cache)
         report("OK" if isinstance(hit, str) else "WARN", f"model {m} cached", "" if isinstance(hit, str) else ("only for ARI/run_optional.sh: bash ARI/install.sh --llama" if "Llama" in m else "run ARI/scripts/fetch_models.py"))
     if online and token:
         for m in MODELS:
