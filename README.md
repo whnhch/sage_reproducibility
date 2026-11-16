@@ -54,6 +54,17 @@ hardware.
 
 ## 1. Quick start
 
+**Docker** (amd64 and arm64; no GPU):
+
+```bash
+docker pull whnhch/sage
+docker run --rm -v "$PWD/out:/sage/ARI/out" whnhch/sage   # Tables 8-9, Figs. 10-11 and the report -> ./out/
+```
+
+Options of Section 7 go after the image name, e.g. `whnhch/sage bash ARI/run_experiments.sh --items table8`.
+
+**Conda** (also for the optional GPU parts):
+
 ```bash
 git clone https://github.com/whnhch/sage_reproducibility.git && cd sage_reproducibility
 bash ARI/install.sh            # environment, data, models, checks, smoke test
@@ -243,6 +254,7 @@ bash ARI/run_optional.sh --proxy --datasets Video
 ```
 sage_reproducibility/
 ├── README.md                     this file
+├── Dockerfile, .dockerignore     the Docker image (Section 1)
 ├── ARI/                          reproducibility scripts
 │   ├── install.sh                step 1: environment, models, checks
 │   ├── run_experiments.sh        step 2: default experiments, figures, report
