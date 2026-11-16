@@ -54,16 +54,19 @@ hardware.
 
 ## 1. Quick start
 
-**Docker** (amd64 and arm64; no GPU):
+**Docker** (amd64 and arm64):
 
 ```bash
 docker pull whnhch/sage
 docker run --rm -v "$PWD/out:/sage/ARI/out" whnhch/sage   # Tables 8-9, Figs. 10-11 and the report -> ./out/
+# optional, GPU (amd64, NVIDIA Container Toolkit); the volume sage_hf keeps Llama between runs
+docker run --rm --gpus all -v sage_hf:/opt/hf -v "$PWD/hf_token.txt:/sage/hf_token.txt:ro" \
+  -v "$PWD/out:/sage/ARI/out" whnhch/sage bash ARI/run_optional.sh --bf
 ```
 
 Options of Section 7 go after the image name, e.g. `whnhch/sage bash ARI/run_experiments.sh --items table8`.
 
-**Conda** (also for the optional GPU parts):
+**Conda**:
 
 ```bash
 git clone https://github.com/whnhch/sage_reproducibility.git && cd sage_reproducibility
